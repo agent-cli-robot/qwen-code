@@ -4,7 +4,7 @@ The Welcome Back feature helps you seamlessly resume your work by automatically 
 
 ## Overview
 
-When you start Qwen Code in a project directory that contains a previously generated project summary (`.qwen/PROJECT_SUMMARY.md`), the Welcome Back dialog will automatically appear, giving you the option to either start fresh or continue your previous conversation.
+When you start Agent CLI in a project directory that contains a previously generated project summary (`.agent/PROJECT_SUMMARY.md`), the Welcome Back dialog will automatically appear, giving you the option to either start fresh or continue your previous conversation.
 
 ## How It Works
 
@@ -12,7 +12,7 @@ When you start Qwen Code in a project directory that contains a previously gener
 
 The Welcome Back feature automatically detects:
 
-- **Project Summary File:** Looks for `.qwen/PROJECT_SUMMARY.md` in your current project directory
+- **Project Summary File:** Looks for `.agent/PROJECT_SUMMARY.md` in your current project directory
 - **Conversation History:** Checks if there's meaningful conversation history to resume
 - **Settings:** Respects your `enableWelcomeBack` setting (enabled by default)
 
@@ -37,7 +37,7 @@ You have two choices when the Welcome Back dialog appears:
    - No previous context is loaded
 
 2. **Continue previous conversation**
-   - Automatically fills the input with: `@.qwen/PROJECT_SUMMARY.md, Based on our previous conversation, Let's continue?`
+   - Automatically fills the input with: `@.agent/PROJECT_SUMMARY.md, Based on our previous conversation, Let's continue?`
    - Loads the project summary as context for the AI
    - Allows you to seamlessly pick up where you left off
 
@@ -49,12 +49,12 @@ You can control the Welcome Back feature through settings:
 
 **Via Settings Dialog:**
 
-1. Run `/settings` in Qwen Code
+1. Run `/settings` in Agent CLI
 2. Find "Enable Welcome Back" in the UI category
 3. Toggle the setting on/off
 
 **Via Settings File:**
-Add to your `.qwen/settings.json`:
+Add to your `.agent/settings.json`:
 
 ```json
 {
@@ -64,8 +64,8 @@ Add to your `.qwen/settings.json`:
 
 **Settings Locations:**
 
-- **User settings:** `~/.qwen/settings.json` (affects all projects)
-- **Project settings:** `.qwen/settings.json` (project-specific)
+- **User settings:** `~/.agent/settings.json` (affects all projects)
+- **Project settings:** `.agent/settings.json` (project-specific)
 
 ### Keyboard Shortcuts
 
@@ -78,7 +78,7 @@ Add to your `.qwen/settings.json`:
 The Welcome Back feature works seamlessly with the `/chat summary` command:
 
 1. **Generate Summary:** Use `/chat summary` to create a project summary
-2. **Automatic Detection:** Next time you start Qwen Code in this project, Welcome Back will detect the summary
+2. **Automatic Detection:** Next time you start Agent CLI in this project, Welcome Back will detect the summary
 3. **Resume Work:** Choose to continue and the summary will be loaded as context
 
 ### Quit Confirmation
@@ -95,7 +95,7 @@ The Welcome Back feature creates and uses:
 
 ```
 your-project/
-├── .qwen/
+├── .agent/
 │   └── PROJECT_SUMMARY.md    # Generated project summary
 ```
 

@@ -1,20 +1,20 @@
-# Qwen Code Observability Guide
+# Agent CLI Observability Guide
 
-Telemetry provides data about Qwen Code's performance, health, and usage. By enabling it, you can monitor operations, debug issues, and optimize tool usage through traces, metrics, and structured logs.
+Telemetry provides data about Agent CLI's performance, health, and usage. By enabling it, you can monitor operations, debug issues, and optimize tool usage through traces, metrics, and structured logs.
 
-Qwen Code's telemetry system is built on the **[OpenTelemetry] (OTEL)** standard, allowing you to send data to any compatible backend.
+Agent CLI's telemetry system is built on the **[OpenTelemetry] (OTEL)** standard, allowing you to send data to any compatible backend.
 
 [OpenTelemetry]: https://opentelemetry.io/
 
 ## Enabling telemetry
 
-You can enable telemetry in multiple ways. Configuration is primarily managed via the [`.qwen/settings.json` file](./cli/configuration.md) and environment variables, but CLI flags can override these settings for a specific session.
+You can enable telemetry in multiple ways. Configuration is primarily managed via the [`.agent/settings.json` file](./cli/configuration.md) and environment variables, but CLI flags can override these settings for a specific session.
 
 ### Order of precedence
 
 The following lists the precedence for applying telemetry settings, with items listed higher having greater precedence:
 
-1.  **CLI flags (for `qwen` command):**
+1.  **CLI flags (for `agent` command):**
     - `--telemetry` / `--no-telemetry`: Overrides `telemetry.enabled`.
     - `--telemetry-target <local|gcp>`: Overrides `telemetry.target`.
     - `--telemetry-otlp-endpoint <URL>`: Overrides `telemetry.otlpEndpoint`.
@@ -24,9 +24,9 @@ The following lists the precedence for applying telemetry settings, with items l
 1.  **Environment variables:**
     - `OTEL_EXPORTER_OTLP_ENDPOINT`: Overrides `telemetry.otlpEndpoint`.
 
-1.  **Workspace settings file (`.qwen/settings.json`):** Values from the `telemetry` object in this project-specific file.
+1.  **Workspace settings file (`.agent/settings.json`):** Values from the `telemetry` object in this project-specific file.
 
-1.  **User settings file (`~/.qwen/settings.json`):** Values from the `telemetry` object in this global user file.
+1.  **User settings file (`~/.agent/settings.json`):** Values from the `telemetry` object in this global user file.
 
 1.  **Defaults:** applied if not set by any of the above.
     - `telemetry.enabled`: `false`
@@ -39,7 +39,7 @@ The `--target` argument to this script _only_ overrides the `telemetry.target` f
 
 ### Example settings
 
-The following code can be added to your workspace (`.qwen/settings.json`) or user (`~/.qwen/settings.json`) settings to enable telemetry and send the output to Google Cloud:
+The following code can be added to your workspace (`.agent/settings.json`) or user (`~/.agent/settings.json`) settings to enable telemetry and send the output to Google Cloud:
 
 ```json
 {
@@ -59,16 +59,16 @@ To enable file export, use the `--telemetry-outfile` flag with a path to your de
 
 ```bash
 # Set your desired output file path
-TELEMETRY_FILE=".qwen/telemetry.log"
+TELEMETRY_FILE=".agent/telemetry.log"
 
-# Run Qwen Code with local telemetry
-# NOTE: --telemetry-otlp-endpoint="" is required to override the default
+# Run Agent CLI with local telemetry
+# NOTE: --telemetry-otlp-endpoint=\"\" is required to override the default
 # OTLP exporter and ensure telemetry is written to the local file.
-qwen --telemetry \
-  --telemetry-target=local \
-  --telemetry-otlp-endpoint="" \
-  --telemetry-outfile="$TELEMETRY_FILE" \
-  --prompt "What is OpenTelemetry?"
+agent --telemetry \\
+  --telemetry-target=local \\
+  --telemetry-otlp-endpoint=\"\" \\
+  --telemetry-outfile=\"$TELEMETRY_FILE\" \\
+  --prompt \"What is OpenTelemetry?\"
 ```
 
 ## Running an OTEL Collector
@@ -86,7 +86,7 @@ Learn more about OTEL exporter standard configuration in [documentation][otel-co
 
 ### Local
 
-Use the `npm run telemetry -- --target=local` command to automate the process of setting up a local telemetry pipeline, including configuring the necessary settings in your `.qwen/settings.json` file. The underlying script installs `otelcol-contrib` (the OpenTelemetry Collector) and `jaeger` (The Jaeger UI for viewing traces). To use it:
+Use the `npm run telemetry -- --target=local` command to automate the process of setting up a local telemetry pipeline, including configuring the necessary settings in your `.agent/settings.json` file. The underlying script installs `otelcol-contrib` (the OpenTelemetry Collector) and `jaeger` (The Jaeger UI for viewing traces). To use it:
 
 1.  **Run the command**:
     Execute the command from the root of the repository:
@@ -98,22 +98,21 @@ Use the `npm run telemetry -- --target=local` command to automate the process of
     The script will:
     - Download Jaeger and OTEL if needed.
     - Start a local Jaeger instance.
-    - Start an OTEL collector configured to receive data from Qwen Code.
+    - Start an OTEL collector configured to receive data from Agent CLI.
     - Automatically enable telemetry in your workspace settings.
     - On exit, disable telemetry.
 
 1.  **View traces**:
-    Open your web browser and navigate to **http://localhost:16686** to access the Jaeger UI. Here you can inspect detailed traces of Qwen Code operations.
+    Open your web browser and navigate to **http://localhost:16686** to access the Jaeger UI. Here you can inspect detailed traces of Agent CLI operations.
 
-1.  **Inspect logs and metrics**:
-    The script redirects the OTEL collector output (which includes logs and metrics) to `~/.qwen/tmp/<projectHash>/otel/collector.log`. The script will provide links to view and a command to tail your telemetry data (traces, metrics, logs) locally.
+1.  **Inspect logs and metrics**:\n The script redirects the OTEL collector output (which includes logs and metrics) to `~/.agent/tmp/<projectHash>/otel/collector.log`. The script will provide links to view and a command to tail your telemetry data (traces, metrics, logs) locally.
 
 1.  **Stop the services**:
     Press `Ctrl+C` in the terminal where the script is running to stop the OTEL Collector and Jaeger services.
 
 ### Google Cloud
 
-Use the `npm run telemetry -- --target=gcp` command to automate setting up a local OpenTelemetry collector that forwards data to your Google Cloud project, including configuring the necessary settings in your `.qwen/settings.json` file. The underlying script installs `otelcol-contrib`. To use it:
+Use the `npm run telemetry -- --target=gcp` command to automate setting up a local OpenTelemetry collector that forwards data to your Google Cloud project, including configuring the necessary settings in your `.agent/settings.json` file. The underlying script installs `otelcol-contrib`. To use it:
 
 1.  **Prerequisites**:
     - Have a Google Cloud project ID.
@@ -133,34 +132,34 @@ Use the `npm run telemetry -- --target=gcp` command to automate setting up a loc
 
     The script will:
     - Download the `otelcol-contrib` binary if needed.
-    - Start an OTEL collector configured to receive data from Qwen Code and export it to your specified Google Cloud project.
-    - Automatically enable telemetry and disable sandbox mode in your workspace settings (`.qwen/settings.json`).
+    - Start an OTEL collector configured to receive data from Agent CLI and export it to your specified Google Cloud project.
+    - Automatically enable telemetry and disable sandbox mode in your workspace settings (`.agent/settings.json`).
     - Provide direct links to view traces, metrics, and logs in your Google Cloud Console.
     - On exit (Ctrl+C), it will attempt to restore your original telemetry and sandbox settings.
 
-1.  **Run Qwen Code:**
-    In a separate terminal, run your Qwen Code commands. This generates telemetry data that the collector captures.
+1.  **Run Agent CLI:**
+    In a separate terminal, run your Agent CLI commands. This generates telemetry data that the collector captures.
 
 1.  **View telemetry in Google Cloud**:
     Use the links provided by the script to navigate to the Google Cloud Console and view your traces, metrics, and logs.
 
 1.  **Inspect local collector logs**:
-    The script redirects the local OTEL collector output to `~/.qwen/tmp/<projectHash>/otel/collector-gcp.log`. The script provides links to view and command to tail your collector logs locally.
+    The script redirects the local OTEL collector output to `~/.agent/tmp/<projectHash>/otel/collector-gcp.log`. The script provides links to view and command to tail your collector logs locally.
 
 1.  **Stop the service**:
     Press `Ctrl+C` in the terminal where the script is running to stop the OTEL Collector.
 
 ## Logs and metric reference
 
-The following section describes the structure of logs and metrics generated for Qwen Code.
+The following section describes the structure of logs and metrics generated for Agent CLI.
 
 - A `sessionId` is included as a common attribute on all logs and metrics.
 
 ### Logs
 
-Logs are timestamped records of specific events. The following events are logged for Qwen Code:
+Logs are timestamped records of specific events. The following events are logged for Agent CLI:
 
-- `qwen-code.config`: This event occurs once at startup with the CLI's configuration.
+- `agent-cli.config`: This event occurs once at startup with the CLI's configuration.
   - **Attributes**:
     - `model` (string)
     - `embedding_model` (string)
@@ -175,14 +174,14 @@ Logs are timestamped records of specific events. The following events are logged
     - `debug_mode` (boolean)
     - `mcp_servers` (string)
 
-- `qwen-code.user_prompt`: This event occurs when a user submits a prompt.
+- `agent-cli.user_prompt`: This event occurs when a user submits a prompt.
   - **Attributes**:
     - `prompt_length` (int)
     - `prompt_id` (string)
     - `prompt` (string, this attribute is excluded if `log_prompts_enabled` is configured to be `false`)
     - `auth_type` (string)
 
-- `qwen-code.tool_call`: This event occurs for each function call.
+- `agent-cli.tool_call`: This event occurs for each function call.
   - **Attributes**:
     - `function_name`
     - `function_args`
@@ -193,12 +192,12 @@ Logs are timestamped records of specific events. The following events are logged
     - `error_type` (if applicable)
     - `metadata` (if applicable, dictionary of string -> any)
 
-- `qwen-code.api_request`: This event occurs when making a request to Qwen API.
+- `agent-cli.api_request`: This event occurs when making a request to the API.
   - **Attributes**:
     - `model`
     - `request_text` (if applicable)
 
-- `qwen-code.api_error`: This event occurs if the API request fails.
+- `agent-cli.api_error`: This event occurs if the API request fails.
   - **Attributes**:
     - `model`
     - `error`
@@ -207,7 +206,7 @@ Logs are timestamped records of specific events. The following events are logged
     - `duration_ms`
     - `auth_type`
 
-- `qwen-code.api_response`: This event occurs upon receiving a response from Qwen API.
+- `agent-cli.api_response`: This event occurs upon receiving a response from the API.
   - **Attributes**:
     - `model`
     - `status_code`
@@ -221,49 +220,49 @@ Logs are timestamped records of specific events. The following events are logged
     - `response_text` (if applicable)
     - `auth_type`
 
-- `qwen-code.flash_fallback`: This event occurs when Qwen Code switches to flash as fallback.
+- `agent-cli.flash_fallback`: This event occurs when Agent CLI switches to flash as fallback.
   - **Attributes**:
     - `auth_type`
 
-- `qwen-code.slash_command`: This event occurs when a user executes a slash command.
+- `agent-cli.slash_command`: This event occurs when a user executes a slash command.
   - **Attributes**:
     - `command` (string)
     - `subcommand` (string, if applicable)
 
 ### Metrics
 
-Metrics are numerical measurements of behavior over time. The following metrics are collected for Qwen Code (metric names remain `qwen-code.*` for compatibility):
+Metrics are numerical measurements of behavior over time. The following metrics are collected for Agent CLI:
 
-- `qwen-code.session.count` (Counter, Int): Incremented once per CLI startup.
+- `agent-cli.session.count` (Counter, Int): Incremented once per CLI startup.
 
-- `qwen-code.tool.call.count` (Counter, Int): Counts tool calls.
+- `agent-cli.tool.call.count` (Counter, Int): Counts tool calls.
   - **Attributes**:
     - `function_name`
     - `success` (boolean)
     - `decision` (string: "accept", "reject", or "modify", if applicable)
     - `tool_type` (string: "mcp", or "native", if applicable)
 
-- `qwen-code.tool.call.latency` (Histogram, ms): Measures tool call latency.
+- `agent-cli.tool.call.latency` (Histogram, ms): Measures tool call latency.
   - **Attributes**:
     - `function_name`
     - `decision` (string: "accept", "reject", or "modify", if applicable)
 
-- `qwen-code.api.request.count` (Counter, Int): Counts all API requests.
+- `agent-cli.api.request.count` (Counter, Int): Counts all API requests.
   - **Attributes**:
     - `model`
     - `status_code`
     - `error_type` (if applicable)
 
-- `qwen-code.api.request.latency` (Histogram, ms): Measures API request latency.
+- `agent-cli.api.request.latency` (Histogram, ms): Measures API request latency.
   - **Attributes**:
     - `model`
 
-- `qwen-code.token.usage` (Counter, Int): Counts the number of tokens used.
+- `agent-cli.token.usage` (Counter, Int): Counts the number of tokens used.
   - **Attributes**:
     - `model`
     - `type` (string: "input", "output", "thought", "cache", or "tool")
 
-- `qwen-code.file.operation.count` (Counter, Int): Counts file operations.
+- `agent-cli.file.operation.count` (Counter, Int): Counts file operations.
   - **Attributes**:
     - `operation` (string: "create", "read", "update"): The type of file operation.
     - `lines` (Int, if applicable): Number of lines in the file.
@@ -275,7 +274,7 @@ Metrics are numerical measurements of behavior over time. The following metrics 
     - `user_removed_lines` (Int, if applicable): Number of lines removed/changed by user in AI proposed changes.
     - `programming_language` (string, if applicable): The programming language of the file.
 
-- `qwen-code.chat_compression` (Counter, Int): Counts chat compression operations
+- `agent-cli.chat_compression` (Counter, Int): Counts chat compression operations
   - **Attributes**:
     - `tokens_before`: (Int): Number of tokens in context prior to compression
     - `tokens_after`: (Int): Number of tokens in context after compression
