@@ -1,23 +1,23 @@
-# Qwen Code Extensions
+# Agent CLI Extensions
 
-Qwen Code supports extensions that can be used to configure and extend its functionality.
+Agent CLI supports extensions that can be used to configure and extend its functionality.
 
 ## How it works
 
-On startup, Qwen Code looks for extensions in two locations:
+On startup, Agent CLI looks for extensions in two locations:
 
-1.  `<workspace>/.qwen/extensions`
-2.  `<home>/.qwen/extensions`
+1.  `<workspace>/.agent/extensions`
+2.  `<home>/.agent/extensions`
 
-Qwen Code loads all extensions from both locations. If an extension with the same name exists in both locations, the extension in the workspace directory takes precedence.
+Agent CLI loads all extensions from both locations. If an extension with the same name exists in both locations, the extension in the workspace directory takes precedence.
 
-Within each location, individual extensions exist as a directory that contains a `qwen-extension.json` file. For example:
+Within each location, individual extensions exist as a directory that contains a `agent-extension.json` file. For example:
 
-`<workspace>/.qwen/extensions/my-extension/qwen-extension.json`
+`<workspace>/.agent/extensions/my-extension/agent-extension.json`
 
-### `qwen-extension.json`
+### `agent-extension.json`
 
-The `qwen-extension.json` file contains the configuration for the extension. The file has the following structure:
+The `agent-extension.json` file contains the configuration for the extension. The file has the following structure:
 
 ```json
 {
@@ -28,7 +28,7 @@ The `qwen-extension.json` file contains the configuration for the extension. The
       "command": "node my-server.js"
     }
   },
-  "contextFileName": "QWEN.md",
+  "contextFileName": "AGENTS.md",
   "excludeTools": ["run_shell_command"]
 }
 ```
@@ -36,10 +36,10 @@ The `qwen-extension.json` file contains the configuration for the extension. The
 - `name`: The name of the extension. This is used to uniquely identify the extension and for conflict resolution when extension commands have the same name as user or project commands.
 - `version`: The version of the extension.
 - `mcpServers`: A map of MCP servers to configure. The key is the name of the server, and the value is the server configuration. These servers will be loaded on startup just like MCP servers configured in a [`settings.json` file](./cli/configuration.md). If both an extension and a `settings.json` file configure an MCP server with the same name, the server defined in the `settings.json` file takes precedence.
-- `contextFileName`: The name of the file that contains the context for the extension. This will be used to load the context from the workspace. If this property is not used but a `QWEN.md` file is present in your extension directory, then that file will be loaded.
+- `contextFileName`: The name of the file that contains the context for the extension. This will be used to load the context from the workspace. If this property is not used but a `AGENTS.md` file is present in your extension directory, then that file will be loaded.
 - `excludeTools`: An array of tool names to exclude from the model. You can also specify command-specific restrictions for tools that support it, like the `run_shell_command` tool. For example, `"excludeTools": ["run_shell_command(rm -rf)"]` will block the `rm -rf` command.
 
-When Qwen Code starts, it loads all the extensions and merges their configurations. If there are any conflicts, the workspace configuration takes precedence.
+When Agent CLI starts, it loads all the extensions and merges their configurations. If there are any conflicts, the workspace configuration takes precedence.
 
 ## Extension Commands
 
@@ -50,8 +50,8 @@ Extensions can provide [custom commands](./cli/commands.md#custom-commands) by p
 An extension named `gcp` with the following structure:
 
 ```
-.qwen/extensions/gcp/
-├── qwen-extension.json
+.agent/extensions/gcp/
+├── agent-extension.json
 └── commands/
     ├── deploy.toml
     └── gcs/
@@ -81,20 +81,20 @@ You can install extensions using the `install` command. This command allows you 
 
 ### Usage
 
-`qwen extensions install <source> | [options]`
+`agent extensions install <source> | [options]`
 
 ### Options
 
-- `source <url> positional argument`: The URL of a Git repository to install the extension from. The repository must contain a `qwen-extension.json` file in its root.
-- `--path <path>`: The path to a local directory to install as an extension. The directory must contain a `qwen-extension.json` file.
+- `source <url> positional argument`: The URL of a Git repository to install the extension from. The repository must contain a `agent-extension.json` file in its root.
+- `--path <path>`: The path to a local directory to install as an extension. The directory must contain a `agent-extension.json` file.
 
 # Variables
 
-Qwen Code extensions allow variable substitution in `qwen-extension.json`. This can be useful if e.g., you need the current directory to run an MCP server using `"cwd": "${extensionPath}${/}run.ts"`.
+Agent CLI extensions allow variable substitution in `agent-extension.json`. This can be useful if e.g., you need the current directory to run an MCP server using `"cwd": "${extensionPath}${/}run.ts"`.
 
 **Supported variables:**
 
-| variable                   | description                                                                                                                                                   |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `${extensionPath}`         | The fully-qualified path of the extension in the user's filesystem e.g., '/Users/username/.qwen/extensions/example-extension'. This will not unwrap symlinks. |
-| `${/} or ${pathSeparator}` | The path separator (differs per OS).                                                                                                                          |
+| variable                   | description                                                                                                                                                    |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `${extensionPath}`         | The fully-qualified path of the extension in the user's filesystem e.g., '/Users/username/.agent/extensions/example-extension'. This will not unwrap symlinks. |
+| `${/} or ${pathSeparator}` | The path separator (differs per OS).                                                                                                                           |

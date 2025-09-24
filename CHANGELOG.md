@@ -79,12 +79,12 @@
 ## 0.0.8
 
 - Synced upstream `gemini-cli` to v0.1.19.
-- Updated documentation branding from **Gemini CLI** to **Qwen Code**.
+- Updated documentation branding from **Qwen Code** to **Agent CLI**.
 - Added multilingual docs links in `README.md`.
 - Added deterministic cache control for the DashScope provider.
 - Added option to choose a project-level or global save location.
 - Limited `grep` results to 25 items by default.
-- `grep` now respects `.qwenignore`.
+- `grep` now respects `.agentignore`.
 - Miscellaneous improvements and bug fixes.
 
 ## 0.0.7
@@ -101,7 +101,7 @@
 ## 0.0.6
 
 - Added usage statistics logging for Qwen integration.
-- Made `/init` respect the configured context filename and aligned docs with `QWEN.md`.
+- Made `/init` respect the configured context filename and aligned docs with `AGENTS.md`.
 - Fixed `EPERM` error when running `qwen --sandbox` on macOS.
 - Fixed terminal flicker while waiting for login.
 - Fixed `glm-4.5` model request error.
