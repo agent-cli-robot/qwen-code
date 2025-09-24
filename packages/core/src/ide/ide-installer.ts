@@ -119,7 +119,7 @@ class VsCodeInstaller implements IdeInstaller {
       };
     }
 
-    const command = `"${commandPath}" --install-extension qwenlm.qwen-code-vscode-ide-companion --force`;
+    const command = `"${commandPath}" --install-extension agent-cli.agent-cli-vscode-ide-companion --force`;
     try {
       child_process.execSync(command, { stdio: 'pipe' });
       return {

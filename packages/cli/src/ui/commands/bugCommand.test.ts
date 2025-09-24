@@ -16,7 +16,7 @@ import { formatMemoryUsage } from '../utils/formatters.js';
 vi.mock('open');
 vi.mock('../../utils/version.js');
 vi.mock('../utils/formatters.js');
-vi.mock('@qwen-code/qwen-code-core');
+vi.mock('@agent-cli/agent-cli-core');
 vi.mock('node:process', () => ({
   default: {
     platform: 'test-platform',
@@ -31,7 +31,7 @@ describe('bugCommand', () => {
   beforeEach(() => {
     vi.mocked(getCliVersion).mockResolvedValue('0.1.0');
     vi.mocked(formatMemoryUsage).mockReturnValue('100 MB');
-    vi.mock('@qwen-code/qwen-code-core', () => ({
+    vi.mock('@agent-cli/agent-cli-core', () => ({
       sessionId: 'test-session-id',
     }));
     vi.stubEnv('SANDBOX', 'qwen-test');
@@ -70,7 +70,7 @@ describe('bugCommand', () => {
 * **IDE Client:** VSCode
 `;
     const expectedUrl =
-      'https://github.com/QwenLM/qwen-code/issues/new?template=bug_report.yml&title=A%20test%20bug&info=' +
+      'https://github.com/agent-cli/agent-cli/issues/new?template=bug_report.yml&title=A%20test%20bug&info=' +
       encodeURIComponent(expectedInfo);
 
     expect(open).toHaveBeenCalledWith(expectedUrl);

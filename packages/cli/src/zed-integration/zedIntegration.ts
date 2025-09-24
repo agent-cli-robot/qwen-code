@@ -12,7 +12,7 @@ import type {
   GeminiChat,
   ToolCallConfirmationDetails,
   ToolResult,
-} from '@qwen-code/qwen-code-core';
+} from '@agent-cli/agent-cli-core';
 import {
   AuthType,
   clearCachedCredentialFile,
@@ -26,7 +26,7 @@ import {
   MCPServerConfig,
   StreamEventType,
   ToolConfirmationOutcome,
-} from '@qwen-code/qwen-code-core';
+} from '@agent-cli/agent-cli-core';
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import { Readable, Writable } from 'node:stream';

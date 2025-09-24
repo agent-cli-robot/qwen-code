@@ -34,7 +34,7 @@ vi.mock('fs', async (importOriginal) => {
 describe('initCommand', () => {
   let mockContext: CommandContext;
   const targetDir = '/test/dir';
-  const DEFAULT_CONTEXT_FILENAME = 'QWEN.md';
+  const DEFAULT_CONTEXT_FILENAME = 'AGENTS.md';
   const geminiMdPath = path.join(targetDir, DEFAULT_CONTEXT_FILENAME);
 
   beforeEach(() => {
@@ -97,7 +97,7 @@ describe('initCommand', () => {
       expect.objectContaining({
         type: 'submit_prompt',
         content: expect.stringContaining(
-          'You are Qwen Code, an interactive CLI agent',
+          'You are Agent CLI, an interactive CLI agent',
         ),
       }),
     );
@@ -109,10 +109,25 @@ describe('initCommand', () => {
 
     const result = await initCommand.action!(mockContext, '');
 
+    // Assert: Check that writeFileSync was called correctly
     expect(fs.writeFileSync).toHaveBeenCalledWith(geminiMdPath, '', 'utf8');
+
+    // Assert: Check that an informational message was added to the UI
+    expect(mockContext.ui.addItem).toHaveBeenCalledWith(
+      {
+        type: 'info',
+        text: `Empty ${DEFAULT_CONTEXT_FILENAME} created. Now analyzing the project to populate it.`,
+      },
+      expect.any(Number),
+    );
+
+    // Assert: Check that the correct prompt is submitted
     expect(result).toEqual(
       expect.objectContaining({
         type: 'submit_prompt',
+        content: expect.stringContaining(
+          'You are Agent CLI, an interactive CLI agent',
+        ),
       }),
     );
   });
@@ -143,7 +158,7 @@ describe('initCommand', () => {
       expect.objectContaining({
         type: 'submit_prompt',
         content: expect.stringContaining(
-          'You are Qwen Code, an interactive CLI agent',
+          'You are Agent CLI, an interactive CLI agent',
         ),
       }),
     );

@@ -5,8 +5,8 @@
  */
 
 import * as path from 'node:path';
-import type { Config } from '@qwen-code/qwen-code-core';
-import { Storage } from '@qwen-code/qwen-code-core';
+import type { Config } from '@agent-cli/agent-cli-core';
+import { Storage } from '@agent-cli/agent-cli-core';
 import mock from 'mock-fs';
 import { FileCommandLoader } from './FileCommandLoader.js';
 import { assert, vi } from 'vitest';
@@ -57,9 +57,9 @@ vi.mock('./prompt-processors/argumentProcessor.js', async (importOriginal) => {
       .mockImplementation(() => new original.DefaultArgumentProcessor()),
   };
 });
-vi.mock('@qwen-code/qwen-code-core', async (importOriginal) => {
+vi.mock('@agent-cli/agent-cli-core', async (importOriginal) => {
   const original =
-    await importOriginal<typeof import('@qwen-code/qwen-code-core')>();
+    await importOriginal<typeof import('@agent-cli/agent-cli-core')>();
   return {
     ...original,
     Storage: original.Storage,
@@ -525,7 +525,7 @@ describe('FileCommandLoader', () => {
       ).getProjectCommandsDir();
       const extensionDir = path.join(
         process.cwd(),
-        '.qwen/extensions/test-ext',
+        '.agent/extensions/test-ext',
       );
 
       mock({
@@ -576,7 +576,7 @@ describe('FileCommandLoader', () => {
       ).getProjectCommandsDir();
       const extensionDir = path.join(
         process.cwd(),
-        '.qwen/extensions/test-ext',
+        '.agent/extensions/test-ext',
       );
 
       mock({
@@ -670,11 +670,11 @@ describe('FileCommandLoader', () => {
     it('only loads commands from active extensions', async () => {
       const extensionDir1 = path.join(
         process.cwd(),
-        '.qwen/extensions/active-ext',
+        '.agent/extensions/active-ext',
       );
       const extensionDir2 = path.join(
         process.cwd(),
-        '.qwen/extensions/inactive-ext',
+        '.agent/extensions/inactive-ext',
       );
 
       mock({
@@ -727,7 +727,7 @@ describe('FileCommandLoader', () => {
     it('handles missing extension commands directory gracefully', async () => {
       const extensionDir = path.join(
         process.cwd(),
-        '.qwen/extensions/no-commands',
+        '.agent/extensions/no-commands',
       );
 
       mock({
@@ -757,7 +757,7 @@ describe('FileCommandLoader', () => {
     });
 
     it('handles nested command structure in extensions', async () => {
-      const extensionDir = path.join(process.cwd(), '.qwen/extensions/a');
+      const extensionDir = path.join(process.cwd(), '.agent/extensions/a');
 
       mock({
         [extensionDir]: {

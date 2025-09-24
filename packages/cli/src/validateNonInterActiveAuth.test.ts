@@ -15,7 +15,7 @@ import {
 } from 'vitest';
 import type { NonInteractiveConfig } from './validateNonInterActiveAuth.js';
 import { validateNonInteractiveAuth } from './validateNonInterActiveAuth.js';
-import { AuthType } from '@qwen-code/qwen-code-core';
+import { AuthType } from '@agent-cli/agent-cli-core';
 import * as auth from './config/auth.js';
 
 describe('validateNonInterActiveAuth', () => {

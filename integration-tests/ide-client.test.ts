@@ -19,9 +19,9 @@ describe.skip('IdeClient', () => {
     const server = new TestMcpServer();
     const port = await server.start();
     const pid = process.pid;
-    const portFile = path.join(os.tmpdir(), `qwen-code-ide-server-${pid}.json`);
+    const portFile = path.join(os.tmpdir(), `agent-cli-ide-server-${pid}.json`);
     fs.writeFileSync(portFile, JSON.stringify({ port }));
-    process.env['QWEN_CODE_IDE_WORKSPACE_PATH'] = process.cwd();
+    process.env['AGENT_CLI_IDE_WORKSPACE_PATH'] = process.cwd();
     process.env['TERM_PROGRAM'] = 'vscode';
 
     const ideClient = await IdeClient.getInstance();
@@ -34,7 +34,7 @@ describe.skip('IdeClient', () => {
 
     fs.unlinkSync(portFile);
     await server.stop();
-    delete process.env['QWEN_CODE_IDE_WORKSPACE_PATH'];
+    delete process.env['AGENT_CLI_IDE_WORKSPACE_PATH'];
   });
 });
 
@@ -60,12 +60,12 @@ describe('IdeClient fallback connection logic', () => {
 
   beforeEach(async () => {
     pid = process.pid;
-    portFile = path.join(os.tmpdir(), `qwen-code-ide-server-${pid}.json`);
+    portFile = path.join(os.tmpdir(), `agent-cli-ide-server-${pid}.json`);
     server = new TestMcpServer();
     envPort = await server.start();
-    process.env['QWEN_CODE_IDE_SERVER_PORT'] = String(envPort);
+    process.env['AGENT_CLI_IDE_SERVER_PORT'] = String(envPort);
     process.env['TERM_PROGRAM'] = 'vscode';
-    process.env['QWEN_CODE_IDE_WORKSPACE_PATH'] = process.cwd();
+    process.env['AGENT_CLI_IDE_WORKSPACE_PATH'] = process.cwd();
     // Reset instance
     (IdeClient as unknown as { instance: IdeClient | undefined }).instance =
       undefined;
@@ -73,8 +73,8 @@ describe('IdeClient fallback connection logic', () => {
 
   afterEach(async () => {
     await server.stop();
-    delete process.env['QWEN_CODE_IDE_SERVER_PORT'];
-    delete process.env['QWEN_CODE_IDE_WORKSPACE_PATH'];
+    delete process.env['AGENT_CLI_IDE_SERVER_PORT'];
+    delete process.env['AGENT_CLI_IDE_WORKSPACE_PATH'];
     if (fs.existsSync(portFile)) {
       fs.unlinkSync(portFile);
     }
@@ -169,9 +169,9 @@ describe('IdeClient with proxy', () => {
     proxyServer = net.createServer().listen();
     proxyServerPort = (proxyServer.address() as net.AddressInfo).port;
 
-    vi.stubEnv('QWEN_CODE_IDE_SERVER_PORT', String(mcpServerPort));
+    vi.stubEnv('AGENT_CLI_IDE_SERVER_PORT', String(mcpServerPort));
     vi.stubEnv('TERM_PROGRAM', 'vscode');
-    vi.stubEnv('QWEN_CODE_IDE_WORKSPACE_PATH', process.cwd());
+    vi.stubEnv('AGENT_CLI_IDE_WORKSPACE_PATH', process.cwd());
 
     // Reset instance
     (IdeClient as unknown as { instance: IdeClient | undefined }).instance =

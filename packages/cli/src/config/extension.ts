@@ -7,8 +7,8 @@
 import type {
   MCPServerConfig,
   GeminiCLIExtension,
-} from '@qwen-code/qwen-code-core';
-import { Storage } from '@qwen-code/qwen-code-core';
+} from '@agent-cli/agent-cli-core';
+import { Storage } from '@agent-cli/agent-cli-core';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as os from 'node:os';
@@ -17,10 +17,10 @@ import { SettingScope, loadSettings } from '../config/settings.js';
 import { getErrorMessage } from '../utils/errors.js';
 import { recursivelyHydrateStrings } from './extensions/variables.js';
 
-export const EXTENSIONS_DIRECTORY_NAME = path.join('.qwen', 'extensions');
-export const EXTENSIONS_CONFIG_FILENAME = 'qwen-extension.json';
+export const EXTENSIONS_DIRECTORY_NAME = path.join('.agent', 'extensions');
+export const EXTENSIONS_CONFIG_FILENAME = 'agent-extension.json';
 export const EXTENSIONS_CONFIG_FILENAME_OLD = 'gemini-extension.json';
-export const INSTALL_METADATA_FILENAME = '.qwen-extension-install.json';
+export const INSTALL_METADATA_FILENAME = '.agent-extension-install.json';
 
 export interface Extension {
   path: string;
@@ -231,7 +231,7 @@ function loadInstallMetadata(
 
 function getContextFileNames(config: ExtensionConfig): string[] {
   if (!config.contextFileName) {
-    return ['QWEN.md'];
+    return ['AGENTS.md'];
   } else if (!Array.isArray(config.contextFileName)) {
     return [config.contextFileName];
   }
@@ -353,11 +353,11 @@ export async function installExtension(
     const newExtension = loadExtension(localSourcePath);
     if (!newExtension) {
       throw new Error(
-        `Invalid extension at ${installMetadata.source}. Please make sure it has a valid qwen-extension.json file.`,
+        `Invalid extension at ${installMetadata.source}. Please make sure it has a valid agent-extension.json file.`,
       );
     }
 
-    // ~/.qwen/extensions/{ExtensionConfig.name}.
+    // ~/.agent/extensions/{ExtensionConfig.name}.
     newExtensionName = newExtension.config.name;
     const extensionStorage = new ExtensionStorage(newExtensionName);
     const destinationPath = extensionStorage.getExtensionDir();
@@ -453,7 +453,7 @@ export async function updateExtension(
   }
   if (!extension.installMetadata) {
     throw new Error(
-      `Extension cannot be updated because it is missing the .qwen-extension.install.json file. To update manually, uninstall and then reinstall the updated version.`,
+      `Extension cannot be updated because it is missing the .agent-extension.install.json file. To update manually, uninstall and then reinstall the updated version.`,
     );
   }
   const originalVersion = extension.config.version;
