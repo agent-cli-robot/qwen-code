@@ -25,20 +25,20 @@ import type {
   ToolInvocation,
   AnyDeclarativeTool,
   AnyToolInvocation,
-} from '@qwen-code/qwen-code-core';
+} from '@agent-cli/agent-cli-core';
 import {
   ToolConfirmationOutcome,
   ApprovalMode,
   Kind,
   BaseDeclarativeTool,
   BaseToolInvocation,
-} from '@qwen-code/qwen-code-core';
+} from '@agent-cli/agent-cli-core';
 import type { HistoryItemWithoutId, HistoryItemToolGroup } from '../types.js';
 import { ToolCallStatus } from '../types.js';
 
 // Mocks
-vi.mock('@qwen-code/qwen-code-core', async () => {
-  const actual = await vi.importActual('@qwen-code/qwen-code-core');
+vi.mock('@agent-cli/agent-cli-core', async () => {
+  const actual = await vi.importActual('@agent-cli/agent-cli-core');
   return {
     ...actual,
     ToolRegistry: vi.fn(),

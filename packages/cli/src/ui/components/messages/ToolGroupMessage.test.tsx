@@ -12,7 +12,7 @@ import { type IndividualToolCallDisplay, ToolCallStatus } from '../../types.js';
 import type {
   Config,
   ToolCallConfirmationDetails,
-} from '@qwen-code/qwen-code-core';
+} from '@agent-cli/agent-cli-core';
 import { TOOL_STATUS } from '../../constants.js';
 
 // Mock child components to isolate ToolGroupMessage behavior

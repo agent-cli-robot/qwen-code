@@ -12,7 +12,7 @@ import {
   GEMINI_CONFIG_DIR as GEMINI_DIR,
   getErrorMessage,
   Storage,
-} from '@qwen-code/qwen-code-core';
+} from '@agent-cli/agent-cli-core';
 import stripJsonComments from 'strip-json-comments';
 import { DefaultLight } from '../ui/themes/default-light.js';
 import { DefaultDark } from '../ui/themes/default.js';
@@ -22,7 +22,7 @@ import { mergeWith } from 'lodash-es';
 
 export type { Settings, MemoryImportFormat };
 
-export const SETTINGS_DIRECTORY_NAME = '.qwen';
+export const SETTINGS_DIRECTORY_NAME = '.agent';
 export const USER_SETTINGS_PATH = Storage.getGlobalSettingsPath();
 export const USER_SETTINGS_DIR = path.dirname(USER_SETTINGS_PATH);
 export const DEFAULT_EXCLUDED_ENV_VARS = ['DEBUG', 'DEBUG_MODE'];
@@ -80,21 +80,21 @@ const MIGRATION_MAP: Record<string, string> = {
 };
 
 export function getSystemSettingsPath(): string {
-  if (process.env['QWEN_CODE_SYSTEM_SETTINGS_PATH']) {
-    return process.env['QWEN_CODE_SYSTEM_SETTINGS_PATH'];
+  if (process.env['AGENT_CLI_SYSTEM_SETTINGS_PATH']) {
+    return process.env['AGENT_CLI_SYSTEM_SETTINGS_PATH'];
   }
   if (platform() === 'darwin') {
-    return '/Library/Application Support/QwenCode/settings.json';
+    return '/Library/Application Support/AgentCLI/settings.json';
   } else if (platform() === 'win32') {
-    return 'C:\\ProgramData\\qwen-code\\settings.json';
+    return 'C:\\ProgramData\\agent-cli\\settings.json';
   } else {
-    return '/etc/qwen-code/settings.json';
+    return '/etc/agent-cli/settings.json';
   }
 }
 
 export function getSystemDefaultsPath(): string {
-  if (process.env['QWEN_CODE_SYSTEM_DEFAULTS_PATH']) {
-    return process.env['QWEN_CODE_SYSTEM_DEFAULTS_PATH'];
+  if (process.env['AGENT_CLI_SYSTEM_DEFAULTS_PATH']) {
+    return process.env['AGENT_CLI_SYSTEM_DEFAULTS_PATH'];
   }
   return path.join(
     path.dirname(getSystemSettingsPath()),

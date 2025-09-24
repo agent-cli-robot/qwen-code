@@ -1,6 +1,6 @@
 # Qwen Code Companion
 
-The Qwen Code Companion extension seamlessly integrates [Qwen Code](https://github.com/QwenLM/qwen-code). This extension is compatible with both VS Code and VS Code forks.
+The Agent CLI Companion extension seamlessly integrates [Agent CLI](https://github.com/agent-cli/agent-cli). This extension is compatible with both VS Code and VS Code forks.
 
 # Features
 
@@ -21,4 +21,4 @@ To use this extension, you'll need:
 
 # Terms of Service and Privacy Notice
 
-By installing this extension, you agree to the [Terms of Service](https://github.com/QwenLM/qwen-code/blob/main/docs/tos-privacy.md).
+By installing this extension, you agree to the [Terms of Service](https://github.com/agent-cli/agent-cli/blob/main/docs/tos-privacy.md).

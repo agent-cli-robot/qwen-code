@@ -24,7 +24,7 @@ import {
 import {
   type GeminiCLIExtension,
   type MCPServerConfig,
-} from '@qwen-code/qwen-code-core';
+} from '@agent-cli/agent-cli-core';
 import { execSync } from 'node:child_process';
 import { SettingScope, loadSettings } from './settings.js';
 import { type SimpleGit, simpleGit } from 'simple-git';
@@ -49,7 +49,7 @@ vi.mock('child_process', async (importOriginal) => {
   };
 });
 
-const EXTENSIONS_DIRECTORY_NAME = path.join('.qwen', 'extensions');
+const EXTENSIONS_DIRECTORY_NAME = path.join('.agent', 'extensions');
 
 describe('loadExtensions', () => {
   let tempWorkspaceDir: string;
@@ -57,10 +57,10 @@ describe('loadExtensions', () => {
 
   beforeEach(() => {
     tempWorkspaceDir = fs.mkdtempSync(
-      path.join(os.tmpdir(), 'qwen-code-test-workspace-'),
+      path.join(os.tmpdir(), 'agent-cli-test-workspace-'),
     );
     tempHomeDir = fs.mkdtempSync(
-      path.join(os.tmpdir(), 'qwen-code-test-home-'),
+      path.join(os.tmpdir(), 'agent-cli-test-home-'),
     );
     vi.mocked(os.homedir).mockReturnValue(tempHomeDir);
   });
@@ -96,7 +96,7 @@ describe('loadExtensions', () => {
     expect(extensions[0].config.name).toBe('test-extension');
   });
 
-  it('should load context file path when QWEN.md is present', () => {
+  it('should load context file path when AGENTS.md is present', () => {
     const workspaceExtensionsDir = path.join(
       tempWorkspaceDir,
       EXTENSIONS_DIRECTORY_NAME,
@@ -111,7 +111,7 @@ describe('loadExtensions', () => {
     const ext1 = extensions.find((e) => e.config.name === 'ext1');
     const ext2 = extensions.find((e) => e.config.name === 'ext2');
     expect(ext1?.contextFiles).toEqual([
-      path.join(workspaceExtensionsDir, 'ext1', 'QWEN.md'),
+      path.join(workspaceExtensionsDir, 'ext1', 'AGENTS.md'),
     ]);
     expect(ext2?.contextFiles).toEqual([]);
   });
@@ -149,7 +149,7 @@ describe('loadExtensions', () => {
     createExtension(workspaceExtensionsDir, 'ext1', '1.0.0');
     createExtension(workspaceExtensionsDir, 'ext2', '2.0.0');
 
-    const settingsDir = path.join(tempWorkspaceDir, '.qwen');
+    const settingsDir = path.join(tempWorkspaceDir, '.agent');
     fs.mkdirSync(settingsDir, { recursive: true });
     fs.writeFileSync(
       path.join(settingsDir, 'settings.json'),
@@ -280,10 +280,10 @@ describe('installExtension', () => {
 
   beforeEach(() => {
     tempHomeDir = fs.mkdtempSync(
-      path.join(os.tmpdir(), 'qwen-code-test-home-'),
+      path.join(os.tmpdir(), 'agent-cli-test-home-'),
     );
     vi.mocked(os.homedir).mockReturnValue(tempHomeDir);
-    userExtensionsDir = path.join(tempHomeDir, '.qwen', 'extensions');
+    userExtensionsDir = path.join(tempHomeDir, '.agent', 'extensions');
     // Clean up before each test
     fs.rmSync(userExtensionsDir, { recursive: true, force: true });
     fs.mkdirSync(userExtensionsDir, { recursive: true });
@@ -330,14 +330,14 @@ describe('installExtension', () => {
     );
   });
 
-  it('should throw an error and cleanup if qwen-extension.json is missing', async () => {
+  it('should throw an error and cleanup if agent-extension.json is missing', async () => {
     const sourceExtDir = path.join(tempHomeDir, 'bad-extension');
     fs.mkdirSync(sourceExtDir, { recursive: true });
 
     await expect(
       installExtension({ source: sourceExtDir, type: 'local' }),
     ).rejects.toThrow(
-      `Invalid extension at ${sourceExtDir}. Please make sure it has a valid qwen-extension.json file.`,
+      `Invalid extension at ${sourceExtDir}. Please make sure it has a valid agent-extension.json file.`,
     );
 
     const targetExtDir = path.join(userExtensionsDir, 'bad-extension');
@@ -345,8 +345,8 @@ describe('installExtension', () => {
   });
 
   it('should install an extension from a git URL', async () => {
-    const gitUrl = 'https://github.com/google/qwen-extensions.git';
-    const extensionName = 'qwen-extensions';
+    const gitUrl = 'https://github.com/google/agent-extensions.git';
+    const extensionName = 'agent-extensions';
     const targetExtDir = path.join(userExtensionsDir, extensionName);
     const metadataPath = path.join(targetExtDir, INSTALL_METADATA_FILENAME);
 
@@ -380,10 +380,10 @@ describe('uninstallExtension', () => {
 
   beforeEach(() => {
     tempHomeDir = fs.mkdtempSync(
-      path.join(os.tmpdir(), 'qwen-code-test-home-'),
+      path.join(os.tmpdir(), 'agent-cli-test-home-'),
     );
     vi.mocked(os.homedir).mockReturnValue(tempHomeDir);
-    userExtensionsDir = path.join(tempHomeDir, '.qwen', 'extensions');
+    userExtensionsDir = path.join(tempHomeDir, '.agent', 'extensions');
     // Clean up before each test
     fs.rmSync(userExtensionsDir, { recursive: true, force: true });
     fs.mkdirSync(userExtensionsDir, { recursive: true });
@@ -439,10 +439,10 @@ describe('performWorkspaceExtensionMigration', () => {
 
   beforeEach(() => {
     tempWorkspaceDir = fs.mkdtempSync(
-      path.join(os.tmpdir(), 'qwen-code-test-workspace-'),
+      path.join(os.tmpdir(), 'agent-cli-test-workspace-'),
     );
     tempHomeDir = fs.mkdtempSync(
-      path.join(os.tmpdir(), 'qwen-code-test-home-'),
+      path.join(os.tmpdir(), 'agent-cli-test-home-'),
     );
     vi.mocked(os.homedir).mockReturnValue(tempHomeDir);
   });
@@ -470,7 +470,7 @@ describe('performWorkspaceExtensionMigration', () => {
 
     expect(failed).toEqual([]);
 
-    const userExtensionsDir = path.join(tempHomeDir, '.qwen', 'extensions');
+    const userExtensionsDir = path.join(tempHomeDir, '.agent', 'extensions');
     const userExt1Path = path.join(userExtensionsDir, 'ext1');
     const extensions = loadExtensions(tempWorkspaceDir);
 
@@ -523,7 +523,7 @@ function createExtension(
   );
 
   if (addContextFile) {
-    fs.writeFileSync(path.join(extDir, 'QWEN.md'), 'context');
+    fs.writeFileSync(path.join(extDir, 'AGENTS.md'), 'context');
   }
 
   if (contextFileName) {
@@ -538,10 +538,10 @@ describe('updateExtension', () => {
 
   beforeEach(() => {
     tempHomeDir = fs.mkdtempSync(
-      path.join(os.tmpdir(), 'qwen-code-test-home-'),
+      path.join(os.tmpdir(), 'agent-cli-test-home-'),
     );
     vi.mocked(os.homedir).mockReturnValue(tempHomeDir);
-    userExtensionsDir = path.join(tempHomeDir, '.qwen', 'extensions');
+    userExtensionsDir = path.join(tempHomeDir, '.agent', 'extensions');
     // Clean up before each test
     fs.rmSync(userExtensionsDir, { recursive: true, force: true });
     fs.mkdirSync(userExtensionsDir, { recursive: true });
@@ -555,8 +555,8 @@ describe('updateExtension', () => {
 
   it('should update a git-installed extension', async () => {
     // 1. "Install" an extension
-    const gitUrl = 'https://github.com/google/qwen-extensions.git';
-    const extensionName = 'qwen-extensions';
+    const gitUrl = 'https://github.com/google/agent-extensions.git';
+    const extensionName = 'agent-extensions';
     const targetExtDir = path.join(userExtensionsDir, extensionName);
     const metadataPath = path.join(targetExtDir, INSTALL_METADATA_FILENAME);
 
@@ -612,10 +612,10 @@ describe('disableExtension', () => {
 
   beforeEach(() => {
     tempWorkspaceDir = fs.mkdtempSync(
-      path.join(os.tmpdir(), 'qwen-code-test-workspace-'),
+      path.join(os.tmpdir(), 'agent-cli-test-workspace-'),
     );
     tempHomeDir = fs.mkdtempSync(
-      path.join(os.tmpdir(), 'qwen-code-test-home-'),
+      path.join(os.tmpdir(), 'agent-cli-test-home-'),
     );
     vi.mocked(os.homedir).mockReturnValue(tempHomeDir);
     vi.spyOn(process, 'cwd').mockReturnValue(tempWorkspaceDir);
@@ -665,12 +665,12 @@ describe('enableExtension', () => {
 
   beforeEach(() => {
     tempWorkspaceDir = fs.mkdtempSync(
-      path.join(os.tmpdir(), 'qwen-code-test-workspace-'),
+      path.join(os.tmpdir(), 'agent-cli-test-workspace-'),
     );
     tempHomeDir = fs.mkdtempSync(
-      path.join(os.tmpdir(), 'qwen-code-test-home-'),
+      path.join(os.tmpdir(), 'agent-cli-test-home-'),
     );
-    userExtensionsDir = path.join(tempHomeDir, '.qwen', 'extensions');
+    userExtensionsDir = path.join(tempHomeDir, '.agent', 'extensions');
     vi.mocked(os.homedir).mockReturnValue(tempHomeDir);
     vi.spyOn(process, 'cwd').mockReturnValue(tempWorkspaceDir);
   });

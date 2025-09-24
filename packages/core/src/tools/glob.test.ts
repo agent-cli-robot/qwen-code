@@ -302,7 +302,7 @@ describe('GlobTool', () => {
       // Create a globTool instance specifically for this test, with a deeper root
       tempRootDir = path.join(tempRootDir, 'sub');
       const specificGlobTool = new GlobTool(mockConfig);
-      // const params: GlobToolParams = { pattern: '*.txt', path: '..' }; // This line is unused and will be removed.
+
       // This should be fine as tempRootDir is still within the original tempRootDir (the parent of deeperRootDir)
       // Let's try to go further up.
       const paramsOutside: GlobToolParams = {

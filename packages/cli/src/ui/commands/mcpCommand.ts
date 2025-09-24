@@ -11,7 +11,7 @@ import type {
   MessageActionReturn,
 } from './types.js';
 import { CommandKind } from './types.js';
-import type { DiscoveredMCPPrompt } from '@qwen-code/qwen-code-core';
+import type { DiscoveredMCPPrompt } from '@agent-cli/agent-cli-core';
 import {
   DiscoveredMCPTool,
   getMCPDiscoveryState,
@@ -20,7 +20,7 @@ import {
   MCPServerStatus,
   mcpServerRequiresOAuth,
   getErrorMessage,
-} from '@qwen-code/qwen-code-core';
+} from '@agent-cli/agent-cli-core';
 
 const COLOR_GREEN = '\u001b[32m';
 const COLOR_YELLOW = '\u001b[33m';
@@ -59,7 +59,7 @@ const getMcpStatus = async (
 
   if (serverNames.length === 0 && blockedMcpServers.length === 0) {
     const docsUrl =
-      'https://qwenlm.github.io/qwen-code-docs/en/tools/mcp-server/#how-to-set-up-your-mcp-server';
+      'https://agent-cli.github.io/docs/en/tools/mcp-server/#how-to-set-up-your-mcp-server';
     return {
       type: 'message',
       messageType: 'info',
@@ -140,7 +140,7 @@ const getMcpStatus = async (
       needsAuthHint = true;
       try {
         const { MCPOAuthTokenStorage } = await import(
-          '@qwen-code/qwen-code-core'
+          '@agent-cli/agent-cli-core'
         );
         const hasToken = await MCPOAuthTokenStorage.getToken(serverName);
         if (hasToken) {
@@ -377,7 +377,7 @@ const authCommand: SlashCommand = {
       );
 
       // Import dynamically to avoid circular dependencies
-      const { MCPOAuthProvider } = await import('@qwen-code/qwen-code-core');
+      const { MCPOAuthProvider } = await import('@agent-cli/agent-cli-core');
 
       let oauthConfig = server.oauth;
       if (!oauthConfig) {

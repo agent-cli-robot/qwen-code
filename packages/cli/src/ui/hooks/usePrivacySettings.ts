@@ -5,12 +5,12 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
-import type { Config } from '@qwen-code/qwen-code-core';
+import type { Config } from '@agent-cli/agent-cli-core';
 import {
   CodeAssistServer,
   UserTierId,
   LoggingContentGenerator,
-} from '@qwen-code/qwen-code-core';
+} from '@agent-cli/agent-cli-core';
 
 export interface PrivacyState {
   isLoading: boolean;

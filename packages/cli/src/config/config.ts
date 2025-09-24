@@ -9,7 +9,7 @@ import type {
   FileFilteringOptions,
   MCPServerConfig,
   TelemetryTarget,
-} from '@qwen-code/qwen-code-core';
+} from '@agent-cli/agent-cli-core';
 import {
   ApprovalMode,
   Config,
@@ -23,7 +23,7 @@ import {
   setGeminiMdFilename as setServerGeminiMdFilename,
   ShellTool,
   WriteFileTool,
-} from '@qwen-code/qwen-code-core';
+} from '@agent-cli/agent-cli-core';
 import * as fs from 'node:fs';
 import { homedir } from 'node:os';
 import * as path from 'node:path';
@@ -124,9 +124,9 @@ export async function parseArguments(settings: Settings): Promise<CliArgs> {
     .locale('en')
     .scriptName('qwen')
     .usage(
-      'Usage: qwen [options] [command]\n\nQwen Code - Launch an interactive CLI, use -p/--prompt for non-interactive mode',
+      'Usage: qwen [options] [command]\n\nAgent CLI - Launch an interactive CLI, use -p/--prompt for non-interactive mode',
     )
-    .command('$0', 'Launch Qwen Code', (yargsInstance) =>
+    .command('$0', 'Launch Agent CLI', (yargsInstance) =>
       yargsInstance
         .option('model', {
           alias: 'm',

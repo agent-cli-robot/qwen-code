@@ -7,10 +7,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getStartupWarnings } from './startupWarnings.js';
 import * as fs from 'node:fs/promises';
-import { getErrorMessage } from '@qwen-code/qwen-code-core';
+import { getErrorMessage } from '@agent-cli/agent-cli-core';
 
 vi.mock('fs/promises');
-vi.mock('@qwen-code/qwen-code-core', async (importOriginal) => {
+vi.mock('@agent-cli/agent-cli-core', async (importOriginal) => {
   const actual = await importOriginal();
   return {
     ...actual,

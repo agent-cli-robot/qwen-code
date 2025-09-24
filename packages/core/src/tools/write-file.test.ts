@@ -34,7 +34,7 @@ import {
 import { createMockWorkspaceContext } from '../test-utils/mockWorkspaceContext.js';
 import { StandardFileSystemService } from '../services/fileSystemService.js';
 
-const rootDir = path.resolve(os.tmpdir(), 'qwen-code-test-root');
+const rootDir = path.resolve(os.tmpdir(), 'agent-cli-test-root');
 
 // --- MOCKS ---
 vi.mock('../core/client.js');

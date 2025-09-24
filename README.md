@@ -15,16 +15,6 @@
 
 </div>
 
-<div align="center">
-  
-  <a href="https://agent-cli.github.io/agent-cli-docs/de/">Deutsch</a> | 
-  <a href="https://agent-cli.github.io/agent-cli-docs/fr">français</a> | 
-  <a href="https://agent-cli.github.io/agent-cli-docs/ja/">日本語</a> | 
-  <a href="https://agent-cli.github.io/agent-cli-docs/ru">Русский</a> | 
-  <a href="https://agent-cli.github.io/agent-cli-docs/zh/">中文</a>
-  
-</div>
-
 Agent CLI is a powerful command-line AI workflow tool adapted from [**Gemini CLI**](https://github.com/google-gemini/gemini-cli) ([details](./README.gemini.md)), specifically optimized for [Qwen3-Coder](https://github.com/QwenLM/Qwen3-Coder) models. It enhances your development workflow with advanced code understanding, automated tasks, and intelligent assistance.
 
 ## 💡 Free Options Available
@@ -438,7 +428,7 @@ If you encounter issues, check the [troubleshooting guide](docs/troubleshooting.
 
 ## Acknowledgments
 
-This project is adapted from [Google Gemini CLI](https://github.com/google-gemini/gemini-cli). We acknowledge and appreciate the excellent work of the Gemini CLI team. Our main contribution focuses on parser-level adaptations to better support Qwen-Coder models.
+This project is adapted from [Google Gemini CLI](https://github.com/google-gemini/gemini-cli) and [Qwen Code](https://github.com/agent-cli-robot/qwen-code). We acknowledge and appreciate the excellent work of the Gemini CLI team. Our main contribution focuses on parser-level adaptations to better support Qwen-Coder models.
 
 ## License
 

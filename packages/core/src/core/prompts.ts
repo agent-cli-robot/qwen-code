@@ -158,7 +158,7 @@ export function getCoreSystemPrompt(
   const basePrompt = systemMdEnabled
     ? fs.readFileSync(systemMdPath, 'utf8')
     : `
-You are Qwen Code, an interactive CLI agent developed by Alibaba Group, specializing in software engineering tasks. Your primary goal is to help users safely and efficiently, adhering strictly to the following instructions and utilizing your available tools.
+You are Agent CLI, an interactive CLI agent developed by the community, specializing in software engineering tasks. Your primary goal is to help users safely and efficiently, adhering strictly to the following instructions and utilizing your available tools.
 
 # Core Mandates
 
@@ -793,10 +793,10 @@ To help you check their settings, I can read their contents. Which one would you
 
 function getToolCallExamples(model?: string): string {
   // Check for environment variable override first
-  const toolCallStyle = process.env['QWEN_CODE_TOOL_CALL_STYLE'];
+  const toolCallStyle = process.env['AGENT_CLI_TOOL_CALL_STYLE'];
   if (toolCallStyle) {
     switch (toolCallStyle.toLowerCase()) {
-      case 'qwen-coder':
+      case 'agent-cli':
         return qwenCoderToolCallExamples;
       case 'qwen-vl':
         return qwenVlToolCallExamples;
@@ -804,7 +804,7 @@ function getToolCallExamples(model?: string): string {
         return generalToolCallExamples;
       default:
         console.warn(
-          `Unknown QWEN_CODE_TOOL_CALL_STYLE value: ${toolCallStyle}. Using model-based detection.`,
+          `Unknown AGENT_CLI_TOOL_CALL_STYLE value: ${toolCallStyle}. Using model-based detection.`,
         );
         break;
     }
@@ -812,7 +812,7 @@ function getToolCallExamples(model?: string): string {
 
   // Enhanced regex-based model detection
   if (model && model.length < 100) {
-    // Match qwen*-coder patterns (e.g., qwen3-coder, qwen2.5-coder, qwen-coder)
+    // Match agent-cli patterns (e.g., agent-cli)
     if (/qwen[^-]*-coder/i.test(model)) {
       return qwenCoderToolCallExamples;
     }
