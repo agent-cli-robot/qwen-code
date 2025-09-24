@@ -10,6 +10,8 @@ import * as os from 'node:os';
 import * as path from 'node:path';
 import { WorkspaceContext } from './workspaceContext.js';
 
+const isWindows = os.platform() === 'win32';
+
 describe('WorkspaceContext with real filesystem', () => {
   let tempDir: string;
   let cwd: string;
@@ -83,7 +85,7 @@ describe('WorkspaceContext with real filesystem', () => {
       expect(directories).toHaveLength(2);
     });
 
-    it('should handle symbolic links correctly', () => {
+    it.skipIf(isWindows)('should handle symbolic links correctly', () => {
       const realDir = path.join(tempDir, 'real');
       fs.mkdirSync(realDir, { recursive: true });
       const symlinkDir = path.join(tempDir, 'symlink-to-real');
@@ -163,20 +165,22 @@ describe('WorkspaceContext with real filesystem', () => {
         let realDir: string;
         let symlinkDir: string;
         beforeEach(() => {
-          realDir = path.join(cwd, 'real-dir');
-          fs.mkdirSync(realDir, { recursive: true });
+          if (!isWindows) {
+            realDir = path.join(cwd, 'real-dir');
+            fs.mkdirSync(realDir, { recursive: true });
 
-          symlinkDir = path.join(cwd, 'symlink-file');
-          fs.symlinkSync(realDir, symlinkDir, 'dir');
+            symlinkDir = path.join(cwd, 'symlink-file');
+            fs.symlinkSync(realDir, symlinkDir, 'dir');
+          }
         });
 
-        it('should accept dir paths', () => {
+        it.skipIf(isWindows)('should accept dir paths', () => {
           const workspaceContext = new WorkspaceContext(cwd);
 
           expect(workspaceContext.isPathWithinWorkspace(symlinkDir)).toBe(true);
         });
 
-        it('should accept non-existent paths', () => {
+        it.skipIf(isWindows)('should accept non-existent paths', () => {
           const filePath = path.join(symlinkDir, 'does-not-exist.txt');
 
           const workspaceContext = new WorkspaceContext(cwd);
@@ -184,7 +188,7 @@ describe('WorkspaceContext with real filesystem', () => {
           expect(workspaceContext.isPathWithinWorkspace(filePath)).toBe(true);
         });
 
-        it('should accept non-existent deep paths', () => {
+        it.skipIf(isWindows)('should accept non-existent deep paths', () => {
           const filePath = path.join(symlinkDir, 'deep', 'does-not-exist.txt');
 
           const workspaceContext = new WorkspaceContext(cwd);
@@ -197,14 +201,16 @@ describe('WorkspaceContext with real filesystem', () => {
         let realDir: string;
         let symlinkDir: string;
         beforeEach(() => {
-          realDir = path.join(tempDir, 'real-dir');
-          fs.mkdirSync(realDir, { recursive: true });
+          if (!isWindows) {
+            realDir = path.join(tempDir, 'real-dir');
+            fs.mkdirSync(realDir, { recursive: true });
 
-          symlinkDir = path.join(cwd, 'symlink-file');
-          fs.symlinkSync(realDir, symlinkDir, 'dir');
+            symlinkDir = path.join(cwd, 'symlink-file');
+            fs.symlinkSync(realDir, symlinkDir, 'dir');
+          }
         });
 
-        it('should reject dir paths', () => {
+        it.skipIf(isWindows)('should reject dir paths', () => {
           const workspaceContext = new WorkspaceContext(cwd);
 
           expect(workspaceContext.isPathWithinWorkspace(symlinkDir)).toBe(
@@ -212,7 +218,7 @@ describe('WorkspaceContext with real filesystem', () => {
           );
         });
 
-        it('should reject non-existent paths', () => {
+        it.skipIf(isWindows)('should reject non-existent paths', () => {
           const filePath = path.join(symlinkDir, 'does-not-exist.txt');
 
           const workspaceContext = new WorkspaceContext(cwd);
@@ -220,7 +226,7 @@ describe('WorkspaceContext with real filesystem', () => {
           expect(workspaceContext.isPathWithinWorkspace(filePath)).toBe(false);
         });
 
-        it('should reject non-existent deep paths', () => {
+        it.skipIf(isWindows)('should reject non-existent deep paths', () => {
           const filePath = path.join(symlinkDir, 'deep', 'does-not-exist.txt');
 
           const workspaceContext = new WorkspaceContext(cwd);
@@ -228,41 +234,56 @@ describe('WorkspaceContext with real filesystem', () => {
           expect(workspaceContext.isPathWithinWorkspace(filePath)).toBe(false);
         });
 
-        it('should reject partially non-existent deep paths', () => {
-          const deepDir = path.join(symlinkDir, 'deep');
-          fs.mkdirSync(deepDir, { recursive: true });
-          const filePath = path.join(deepDir, 'does-not-exist.txt');
+        it.skipIf(isWindows)(
+          'should reject partially non-existent deep paths',
+          () => {
+            const deepDir = path.join(symlinkDir, 'deep');
+            fs.mkdirSync(deepDir, { recursive: true });
+            const filePath = path.join(deepDir, 'does-not-exist.txt');
+
+            const workspaceContext = new WorkspaceContext(cwd);
+
+            expect(workspaceContext.isPathWithinWorkspace(filePath)).toBe(
+              false,
+            );
+          },
+        );
+      });
+
+      it.skipIf(isWindows)(
+        'should reject symbolic file links outside the workspace',
+        () => {
+          const realFile = path.join(tempDir, 'real-file.txt');
+          fs.writeFileSync(realFile, 'content');
+
+          const symlinkFile = path.join(cwd, 'symlink-to-real-file');
+          fs.symlinkSync(realFile, symlinkFile, 'file');
 
           const workspaceContext = new WorkspaceContext(cwd);
 
-          expect(workspaceContext.isPathWithinWorkspace(filePath)).toBe(false);
-        });
-      });
+          expect(workspaceContext.isPathWithinWorkspace(symlinkFile)).toBe(
+            false,
+          );
+        },
+      );
 
-      it('should reject symbolic file links outside the workspace', () => {
-        const realFile = path.join(tempDir, 'real-file.txt');
-        fs.writeFileSync(realFile, 'content');
+      it.skipIf(isWindows)(
+        'should reject non-existent symbolic file links outside the workspace',
+        () => {
+          const realFile = path.join(tempDir, 'real-file.txt');
 
-        const symlinkFile = path.join(cwd, 'symlink-to-real-file');
-        fs.symlinkSync(realFile, symlinkFile, 'file');
+          const symlinkFile = path.join(cwd, 'symlink-to-real-file');
+          fs.symlinkSync(realFile, symlinkFile, 'file');
 
-        const workspaceContext = new WorkspaceContext(cwd);
+          const workspaceContext = new WorkspaceContext(cwd);
 
-        expect(workspaceContext.isPathWithinWorkspace(symlinkFile)).toBe(false);
-      });
+          expect(workspaceContext.isPathWithinWorkspace(symlinkFile)).toBe(
+            false,
+          );
+        },
+      );
 
-      it('should reject non-existent symbolic file links outside the workspace', () => {
-        const realFile = path.join(tempDir, 'real-file.txt');
-
-        const symlinkFile = path.join(cwd, 'symlink-to-real-file');
-        fs.symlinkSync(realFile, symlinkFile, 'file');
-
-        const workspaceContext = new WorkspaceContext(cwd);
-
-        expect(workspaceContext.isPathWithinWorkspace(symlinkFile)).toBe(false);
-      });
-
-      it('should handle circular symlinks gracefully', () => {
+      it.skipIf(isWindows)('should handle circular symlinks gracefully', () => {
         const workspaceContext = new WorkspaceContext(cwd);
         const linkA = path.join(cwd, 'link-a');
         const linkB = path.join(cwd, 'link-b');
