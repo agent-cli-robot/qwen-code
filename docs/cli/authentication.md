@@ -1,10 +1,10 @@
 # Authentication Setup
 
-Qwen Code supports two main authentication methods to access AI models. Choose the method that best fits your use case:
+Agent CLI supports two main authentication methods to access AI models. Choose the method that best fits your use case:
 
 1.  **Qwen OAuth (Recommended):**
     - Use this option to log in with your qwen.ai account.
-    - During initial startup, Qwen Code will direct you to the qwen.ai authentication page. Once authenticated, your credentials will be cached locally so the web login can be skipped on subsequent runs.
+    - During initial startup, Agent CLI will direct you to the qwen.ai authentication page. Once authenticated, your credentials will be cached locally so the web login can be skipped on subsequent runs.
     - **Requirements:**
       - Valid qwen.ai account
       - Internet connection for initial authentication
@@ -16,8 +16,8 @@ Qwen Code supports two main authentication methods to access AI models. Choose t
     **Getting Started:**
 
     ```bash
-    # Start Qwen Code and follow the OAuth flow
-    qwen
+    # Start Agent CLI and follow the OAuth flow
+    agent
     ```
 
     The CLI will automatically open your browser and guide you through the authentication process.
@@ -77,17 +77,17 @@ This will allow you to reconfigure your authentication method without restarting
 
 ### Persisting Environment Variables with `.env` Files
 
-You can create a **`.qwen/.env`** file in your project directory or in your home directory. Creating a plain **`.env`** file also works, but `.qwen/.env` is recommended to keep Qwen Code variables isolated from other tools.
+You can create a **`.agent/.env`** file in your project directory or in your home directory. Creating a plain **`.env`** file also works, but `.agent/.env` is recommended to keep Agent CLI variables isolated from other tools.
 
-**Important:** Some environment variables (like `DEBUG` and `DEBUG_MODE`) are automatically excluded from project `.env` files to prevent interference with qwen-code behavior. Use `.qwen/.env` files for qwen-code specific variables.
+**Important:** Some environment variables (like `DEBUG` and `DEBUG_MODE`) are automatically excluded from project `.env` files to prevent interference with Agent CLI behavior. Use `.agent/.env` files for Agent CLI specific variables.
 
-Qwen Code automatically loads environment variables from the **first** `.env` file it finds, using the following search order:
+Agent CLI automatically loads environment variables from the **first** `.env` file it finds, using the following search order:
 
 1. Starting in the **current directory** and moving upward toward `/`, for each directory it checks:
-   1. `.qwen/.env`
+   1. `.agent/.env`
    2. `.env`
 2. If no file is found, it falls back to your **home directory**:
-   - `~/.qwen/.env`
+   - `~/.agent/.env`
    - `~/.env`
 
 > **Important:** The search stops at the **first** file encountered—variables are **not merged** across multiple files.
@@ -97,8 +97,8 @@ Qwen Code automatically loads environment variables from the **first** `.env` fi
 **Project-specific overrides** (take precedence when you are inside the project):
 
 ```bash
-mkdir -p .qwen
-cat >> .qwen/.env <<'EOF'
+mkdir -p .agent
+cat >> .agent/.env <<'EOF'
 OPENAI_API_KEY="your-api-key"
 OPENAI_BASE_URL="https://api-inference.modelscope.cn/v1"
 OPENAI_MODEL="Qwen/Qwen3-Coder-480B-A35B-Instruct"
@@ -108,8 +108,8 @@ EOF
 **User-wide settings** (available in every directory):
 
 ```bash
-mkdir -p ~/.qwen
-cat >> ~/.qwen/.env <<'EOF'
+mkdir -p ~/.agent
+cat >> ~/.agent/.env <<'EOF'
 OPENAI_API_KEY="your-api-key"
 OPENAI_BASE_URL="https://dashscope.aliyuncs.com/compatible-mode/v1"
 OPENAI_MODEL="qwen3-coder-plus"
@@ -118,7 +118,7 @@ EOF
 
 ## Non-Interactive Mode / Headless Environments
 
-When running Qwen Code in a non-interactive environment, you cannot use the OAuth login flow.
+When running Agent CLI in a non-interactive environment, you cannot use the OAuth login flow.
 Instead, you must configure authentication using environment variables.
 
 The CLI will automatically detect if it is running in a non-interactive terminal and will use the
@@ -136,8 +136,8 @@ export OPENAI_API_KEY="your-api-key"
 export OPENAI_BASE_URL="https://api-inference.modelscope.cn/v1"
 export OPENAI_MODEL="Qwen/Qwen3-Coder-480B-A35B-Instruct"
 
-# Run Qwen Code
-qwen
+# Run Agent CLI
+agent
 ```
 
 If no API key is set in a non-interactive session, the CLI will exit with an error prompting you to configure authentication.

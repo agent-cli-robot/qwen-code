@@ -1,13 +1,13 @@
-# Qwen Code Architecture Overview
+# Agent CLI Architecture Overview
 
-This document provides a high-level overview of Qwen Code's architecture.
+This document provides a high-level overview of Agent CLI's architecture.
 
 ## Core components
 
-Qwen Code is primarily composed of two main packages, along with a suite of tools that can be used by the system in the course of handling command-line input:
+Agent CLI is primarily composed of two main packages, along with a suite of tools that can be used by the system in the course of handling command-line input:
 
 1.  **CLI package (`packages/cli`):**
-    - **Purpose:** This contains the user-facing portion of Qwen Code, such as handling the initial user input, presenting the final output, and managing the overall user experience.
+    - **Purpose:** This contains the user-facing portion of Agent CLI, such as handling the initial user input, presenting the final output, and managing the overall user experience.
     - **Key functions contained in the package:**
       - [Input processing](./cli/commands.md)
       - History management
@@ -16,7 +16,7 @@ Qwen Code is primarily composed of two main packages, along with a suite of tool
       - [CLI configuration settings](./cli/configuration.md)
 
 2.  **Core package (`packages/core`):**
-    - **Purpose:** This acts as the backend for Qwen Code. It receives requests sent from `packages/cli`, orchestrates interactions with the configured model API, and manages the execution of available tools.
+    - **Purpose:** This acts as the backend for Agent CLI. It receives requests sent from `packages/cli`, orchestrates interactions with the configured model API, and manages the execution of available tools.
     - **Key functions contained in the package:**
       - API client for communicating with the Google Gemini API
       - Prompt construction and management
@@ -30,7 +30,7 @@ Qwen Code is primarily composed of two main packages, along with a suite of tool
 
 ## Interaction Flow
 
-A typical interaction with Qwen Code follows this flow:
+A typical interaction with Agent CLI follows this flow:
 
 1.  **User input:** The user types a prompt or command into the terminal, which is managed by `packages/cli`.
 2.  **Request to core:** `packages/cli` sends the user's input to `packages/core`.

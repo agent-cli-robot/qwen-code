@@ -1,19 +1,19 @@
-# Sandboxing in Qwen Code
+# Sandboxing in Agent CLI
 
-This document provides a guide to sandboxing in Qwen Code, including prerequisites, quickstart, and configuration.
+This document provides a guide to sandboxing in Agent CLI, including prerequisites, quickstart, and configuration.
 
 ## Prerequisites
 
-Before using sandboxing, you need to install and set up Qwen Code:
+Before using sandboxing, you need to install and set up Agent CLI:
 
 ```bash
-npm install -g @qwen-code/qwen-code
+npm install -g @agent-cli/agent-cli
 ```
 
 To verify the installation
 
 ```bash
-qwen --version
+agent --version
 ```
 
 ## Overview of sandboxing
@@ -47,11 +47,11 @@ Cross-platform sandboxing with complete process isolation.
 
 ```bash
 # Enable sandboxing with command flag
-qwen -s -p "analyze the code structure"
+agent -s -p "analyze the code structure"
 
 # Use environment variable
 export GEMINI_SANDBOX=true
-qwen -p "run the test suite"
+agent -p "run the test suite"
 
 # Configure in settings.json
 {
@@ -126,19 +126,19 @@ export SANDBOX_SET_UID_GID=false  # Disable UID/GID mapping
 ### Debug mode
 
 ```bash
-DEBUG=1 qwen -s -p "debug command"
+DEBUG=1 agent -s -p "debug command"
 ```
 
-**Note:** If you have `DEBUG=true` in a project's `.env` file, it won't affect the CLI due to automatic exclusion. Use `.qwen/.env` files for Qwen Code-specific debug settings.
+**Note:** If you have `DEBUG=true` in a project's `.env` file, it won't affect the CLI due to automatic exclusion. Use `.agent/.env` files for Agent CLI-specific debug settings.
 
 ### Inspect sandbox
 
 ```bash
 # Check environment
-qwen -s -p "run shell command: env | grep SANDBOX"
+agent -s -p "run shell command: env | grep SANDBOX"
 
 # List mounts
-qwen -s -p "run shell command: mount | grep workspace"
+agent -s -p "run shell command: mount | grep workspace"
 ```
 
 ## Security notes

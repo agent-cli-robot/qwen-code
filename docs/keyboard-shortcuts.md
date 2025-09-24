@@ -1,6 +1,6 @@
-# Qwen Code Keyboard Shortcuts
+# Agent CLI Keyboard Shortcuts
 
-This document lists the available keyboard shortcuts in Qwen Code.
+This document lists the available keyboard shortcuts in Agent CLI.
 
 ## General
 

@@ -98,8 +98,8 @@ This section guides contributors on how to build, modify, and understand the dev
 To clone the repository:
 
 ```bash
-git clone https://github.com/google-gemini/gemini-cli.git # Or your fork's URL
-cd gemini-cli
+git clone https://github.com/agent-cli/agent-cli.git # Or your fork's URL
+cd agent-cli
 ```
 
 To install dependencies defined in `package.json` as well as root dependencies:
@@ -120,7 +120,7 @@ This command typically compiles TypeScript to JavaScript, bundles assets, and pr
 
 [Sandboxing](#sandboxing) is highly recommended and requires, at a minimum, setting `GEMINI_SANDBOX=true` in your `~/.env` and ensuring a sandboxing provider (e.g. `macOS Seatbelt`, `docker`, or `podman`) is available. See [Sandboxing](#sandboxing) for details.
 
-To build both the `gemini` CLI utility and the sandbox container, run `build:all` from the root directory:
+To build both the `agent` CLI utility and the sandbox container, run `build:all` from the root directory:
 
 ```bash
 npm run build:all
@@ -130,13 +130,13 @@ To skip building the sandbox container, you can use `npm run build` instead.
 
 ### Running
 
-To start the Gemini CLI from the source code (after building), run the following command from the root directory:
+To start the Agent CLI from the source code (after building), run the following command from the root directory:
 
 ```bash
 npm start
 ```
 
-If you'd like to run the source build outside of the gemini-cli folder you can utilize `npm link path/to/gemini-cli/packages/cli` (see: [docs](https://docs.npmjs.com/cli/v9/commands/npm-link)) or `alias gemini="node path/to/gemini-cli/packages/cli"` to run with `gemini`
+If you'd like to run the source build outside of the agent-cli folder you can utilize `npm link path/to/agent-cli/packages/cli` (see: [docs](https://docs.npmjs.com/cli/v9/commands/npm-link)) or `alias agent="node path/to/agent-cli/packages/cli"` to run with `agent`
 
 ### Running Tests
 
@@ -154,7 +154,7 @@ This will run tests located in the `packages/core` and `packages/cli` directorie
 
 #### Integration Tests
 
-The integration tests are designed to validate the end-to-end functionality of the Gemini CLI. They are not run as part of the default `npm run test` command.
+The integration tests are designed to validate the end-to-end functionality of the Agent CLI. They are not run as part of the default `npm run test` command.
 
 To run the integration tests, use the following command:
 
@@ -209,14 +209,14 @@ npm run lint
 ### Coding Conventions
 
 - Please adhere to the coding style, patterns, and conventions used throughout the existing codebase.
-- Consult [QWEN.md](https://github.com/QwenLM/qwen-code/blob/main/QWEN.md) (typically found in the project root) for specific instructions related to AI-assisted development, including conventions for React, comments, and Git usage.
+- Consult [AGENTS.md](https://github.com/agent-cli/agent-cli/blob/main/AGENTS.md) (typically found in the project root) for specific instructions related to AI-assisted development, including conventions for React, comments, and Git usage.
 - **Imports:** Pay special attention to import paths. The project uses ESLint to enforce restrictions on relative imports between packages.
 
 ### Project Structure
 
 - `packages/`: Contains the individual sub-packages of the project.
   - `cli/`: The command-line interface.
-  - `core/`: The core backend logic for the Gemini CLI.
+  - `core/`: The core backend logic for the Agent CLI.
 - `docs/`: Contains all project documentation.
 - `scripts/`: Utility scripts for building, testing, and development tasks.
 
@@ -231,7 +231,7 @@ For more detailed architecture, see `docs/architecture.md`.
     ```bash
     npm run debug
     ```
-    This command runs `node --inspect-brk dist/gemini.js` within the `packages/cli` directory, pausing execution until a debugger attaches. You can then open `chrome://inspect` in your Chrome browser to connect to the debugger.
+    This command runs `node --inspect-brk dist/agent.js` within the `packages/cli` directory, pausing execution until a debugger attaches. You can then open `chrome://inspect` in your Chrome browser to connect to the debugger.
 2.  In VS Code, use the "Attach" launch configuration (found in `.vscode/launch.json`).
 
 Alternatively, you can use the "Launch Program" configuration in VS Code if you prefer to launch the currently open file directly, but 'F5' is generally recommended.
@@ -239,16 +239,16 @@ Alternatively, you can use the "Launch Program" configuration in VS Code if you 
 To hit a breakpoint inside the sandbox container run:
 
 ```bash
-DEBUG=1 gemini
+DEBUG=1 agent
 ```
 
-**Note:** If you have `DEBUG=true` in a project's `.env` file, it won't affect gemini-cli due to automatic exclusion. Use `.gemini/.env` files for gemini-cli specific debug settings.
+**Note:** If you have `DEBUG=true` in a project's `.env` file, it won't affect agent-cli due to automatic exclusion. Use `.agent/.env` files for agent-cli specific debug settings.
 
 ### React DevTools
 
 To debug the CLI's React-based UI, you can use React DevTools. Ink, the library used for the CLI's interface, is compatible with React DevTools version 4.x.
 
-1.  **Start the Gemini CLI in development mode:**
+1.  **Start the Agent CLI in development mode:**
 
     ```bash
     DEV=true npm start
@@ -276,13 +276,13 @@ To debug the CLI's React-based UI, you can use React DevTools. Ink, the library 
 
 ### macOS Seatbelt
 
-On macOS, `qwen` uses Seatbelt (`sandbox-exec`) under a `permissive-open` profile (see `packages/cli/src/utils/sandbox-macos-permissive-open.sb`) that restricts writes to the project folder but otherwise allows all other operations and outbound network traffic ("open") by default. You can switch to a `restrictive-closed` profile (see `packages/cli/src/utils/sandbox-macos-restrictive-closed.sb`) that declines all operations and outbound network traffic ("closed") by default by setting `SEATBELT_PROFILE=restrictive-closed` in your environment or `.env` file. Available built-in profiles are `{permissive,restrictive}-{open,closed,proxied}` (see below for proxied networking). You can also switch to a custom profile `SEATBELT_PROFILE=<profile>` if you also create a file `.qwen/sandbox-macos-<profile>.sb` under your project settings directory `.qwen`.
+On macOS, `agent` uses Seatbelt (`sandbox-exec`) under a `permissive-open` profile (see `packages/cli/src/utils/sandbox-macos-permissive-open.sb`) that restricts writes to the project folder but otherwise allows all other operations and outbound network traffic ("open") by default. You can switch to a `restrictive-closed` profile (see `packages/cli/src/utils/sandbox-macos-restrictive-closed.sb`) that declines all operations and outbound network traffic ("closed") by default by setting `SEATBELT_PROFILE=restrictive-closed` in your environment or `.env` file. Available built-in profiles are `{permissive,restrictive}-{open,closed,proxied}` (see below for proxied networking). You can also switch to a custom profile `SEATBELT_PROFILE=<profile>` if you also create a file `.agent/sandbox-macos-<profile>.sb` under your project settings directory `.agent`.
 
 ### Container-based Sandboxing (All Platforms)
 
 For stronger container-based sandboxing on macOS or other platforms, you can set `GEMINI_SANDBOX=true|docker|podman|<command>` in your environment or `.env` file. The specified command (or if `true` then either `docker` or `podman`) must be installed on the host machine. Once enabled, `npm run build:all` will build a minimal container ("sandbox") image and `npm start` will launch inside a fresh instance of that container. The first build can take 20-30s (mostly due to downloading of the base image) but after that both build and start overhead should be minimal. Default builds (`npm run build`) will not rebuild the sandbox.
 
-Container-based sandboxing mounts the project directory (and system temp directory) with read-write access and is started/stopped/removed automatically as you start/stop Gemini CLI. Files created within the sandbox should be automatically mapped to your user/group on host machine. You can easily specify additional mounts, ports, or environment variables by setting `SANDBOX_{MOUNTS,PORTS,ENV}` as needed. You can also fully customize the sandbox for your projects by creating the files `.qwen/sandbox.Dockerfile` and/or `.qwen/sandbox.bashrc` under your project settings directory (`.qwen`) and running `qwen` with `BUILD_SANDBOX=1` to trigger building of your custom sandbox.
+Container-based sandboxing mounts the project directory (and system temp directory) with read-write access and is started/stopped/removed automatically as you start/stop Agent CLI. Files created within the sandbox should be automatically mapped to your user/group on host machine. You can easily specify additional mounts, ports, or environment variables by setting `SANDBOX_{MOUNTS,PORTS,ENV}` as needed. You can also fully customize the sandbox for your projects by creating the files `.agent/sandbox.Dockerfile` and/or `.agent/sandbox.bashrc` under your project settings directory (`.agent`) and running `agent` with `BUILD_SANDBOX=1` to trigger building of your custom sandbox.
 
 #### Proxied Networking
 
