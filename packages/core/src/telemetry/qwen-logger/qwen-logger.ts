@@ -227,7 +227,7 @@ export class QwenLogger {
       },
       view: {
         id: this.sessionId,
-        name: 'qwen-code-cli',
+        name: 'agent-cli',
       },
 
       events: this.events.toArray() as RumEvent[],
@@ -239,7 +239,7 @@ export class QwenLogger {
             ? process.env['OPENAI_BASE_URL']
             : '',
       },
-      _v: `qwen-code@${version}`,
+      _v: `agent-cli@${version}`,
     };
   }
 

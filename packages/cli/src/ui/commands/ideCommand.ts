@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { Config, IdeClient, File } from '@qwen-code/qwen-code-core';
+import type { Config, IdeClient, File } from '@agent-cli/agent-cli-core';
 import {
   QWEN_CODE_COMPANION_EXTENSION_NAME,
   getIdeInstaller,
   IDEConnectionStatus,
   ideContext,
-} from '@qwen-code/qwen-code-core';
+} from '@agent-cli/agent-cli-core';
 import path from 'node:path';
 import type {
   CommandContext,
@@ -126,7 +126,7 @@ export const ideCommand = (config: Config | null): SlashCommand | null => {
         ({
           type: 'message',
           messageType: 'error',
-          content: `IDE integration is not supported in your current environment. To use this feature, run Qwen Code in one of these supported IDEs: VS Code or VS Code forks.`,
+          content: `IDE integration is not supported in your current environment. To use this feature, run Agent CLI in one of these supported IDEs: VS Code or VS Code forks.`,
         }) as const,
     };
   }

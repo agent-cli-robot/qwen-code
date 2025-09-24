@@ -1,6 +1,6 @@
 {
-  "name": "@qwen-code/qwen-code",
-  "version": "0.0.13",
+  "name": "@agent-cli/agent-cli",
+  "version": "0.0.1",
   "engines": {
     "node": ">=20.0.0"
   },
@@ -10,10 +10,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/QwenLM/qwen-code.git"
+    "url": "git+https://github.com/agent-cli/agent-cli.git"
   },
   "config": {
-    "sandboxImageUri": "ghcr.io/qwenlm/qwen-code:0.0.13"
+    "sandboxImageUri": "ghcr.io/agent-cli/agent-cli:0.0.1"
   },
   "scripts": {
     "start": "node scripts/start.js",

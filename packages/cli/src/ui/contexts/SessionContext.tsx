@@ -14,8 +14,8 @@ import {
   useEffect,
 } from 'react';
 
-import type { SessionMetrics, ModelMetrics } from '@qwen-code/qwen-code-core';
-import { uiTelemetryService, sessionId } from '@qwen-code/qwen-code-core';
+import type { SessionMetrics, ModelMetrics } from '@agent-cli/agent-cli-core';
+import { uiTelemetryService, sessionId } from '@agent-cli/agent-cli-core';
 
 // --- Interface Definitions ---
 

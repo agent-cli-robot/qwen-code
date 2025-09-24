@@ -49,3 +49,7 @@ logs/
 gha-creds-*.json
 
 QWEN.md
+
+
+# agent-cli settings
+.agent/

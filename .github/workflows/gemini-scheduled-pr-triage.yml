@@ -9,7 +9,7 @@ jobs:
   audit-prs:
     timeout-minutes: 15
     if: |-
-      ${{ github.repository == 'QwenLM/qwen-code' }}
+      ${{ github.repository == 'agent-cli/agent-cli' }}
     permissions:
       contents: 'read'
       id-token: 'write'

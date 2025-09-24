@@ -18,7 +18,7 @@ let logger: vscode.OutputChannel;
 let log: (message: string) => void = () => {};
 
 export async function activate(context: vscode.ExtensionContext) {
-  logger = vscode.window.createOutputChannel('Qwen Code Companion');
+  logger = vscode.window.createOutputChannel('Agent CLI Companion');
   log = createLogger(context, logger);
   log('Extension activated');
 
@@ -59,7 +59,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
   if (!context.globalState.get(INFO_MESSAGE_SHOWN_KEY)) {
     void vscode.window.showInformationMessage(
-      'Qwen Code Companion extension successfully installed.',
+      'Agent CLI Companion extension successfully installed.',
     );
     context.globalState.update(INFO_MESSAGE_SHOWN_KEY, true);
   }
@@ -68,11 +68,11 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.workspace.onDidChangeWorkspaceFolders(() => {
       ideServer.updateWorkspacePath();
     }),
-    vscode.commands.registerCommand('qwen-code.runQwenCode', async () => {
+    vscode.commands.registerCommand('agent-cli.runAgentCli', async () => {
       const workspaceFolders = vscode.workspace.workspaceFolders;
       if (!workspaceFolders || workspaceFolders.length === 0) {
         vscode.window.showInformationMessage(
-          'No folder open. Please open a folder to run Qwen Code.',
+          'No folder open. Please open a folder to run Agent CLI.',
         );
         return;
       }
@@ -82,21 +82,21 @@ export async function activate(context: vscode.ExtensionContext) {
         selectedFolder = workspaceFolders[0];
       } else {
         selectedFolder = await vscode.window.showWorkspaceFolderPick({
-          placeHolder: 'Select a folder to run Qwen Code in',
+          placeHolder: 'Select a folder to run Agent CLI in',
         });
       }
 
       if (selectedFolder) {
         const qwenCmd = 'qwen';
         const terminal = vscode.window.createTerminal({
-          name: `Qwen Code (${selectedFolder.name})`,
+          name: `Agent CLI (${selectedFolder.name})`,
           cwd: selectedFolder.uri.fsPath,
         });
         terminal.show();
         terminal.sendText(qwenCmd);
       }
     }),
-    vscode.commands.registerCommand('qwen-code.showNotices', async () => {
+    vscode.commands.registerCommand('agent-cli.showNotices', async () => {
       const noticePath = vscode.Uri.joinPath(
         context.extensionUri,
         'NOTICES.txt',

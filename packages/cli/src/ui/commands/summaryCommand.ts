@@ -11,13 +11,13 @@ import {
   CommandKind,
   type SlashCommandActionReturn,
 } from './types.js';
-import { getProjectSummaryPrompt } from '@qwen-code/qwen-code-core';
+import { getProjectSummaryPrompt } from '@agent-cli/agent-cli-core';
 import type { HistoryItemSummary } from '../types.js';
 
 export const summaryCommand: SlashCommand = {
   name: 'summary',
   description:
-    'Generate a project summary and save it to .qwen/PROJECT_SUMMARY.md',
+    'Generate a project summary and save it to .agent/PROJECT_SUMMARY.md',
   kind: CommandKind.BUILT_IN,
   action: async (context): Promise<SlashCommandActionReturn> => {
     const { config } = context.services;
@@ -126,17 +126,17 @@ export const summaryCommand: SlashCommand = {
         },
       });
 
-      // Ensure .qwen directory exists
+      // Ensure .agent directory exists
       const projectRoot = config.getProjectRoot();
-      const qwenDir = path.join(projectRoot, '.qwen');
+      const agentDir = path.join(projectRoot, '.agent');
       try {
-        await fsPromises.mkdir(qwenDir, { recursive: true });
+        await fsPromises.mkdir(agentDir, { recursive: true });
       } catch (_err) {
         // Directory might already exist, ignore error
       }
 
       // Save the summary to PROJECT_SUMMARY.md
-      const summaryPath = path.join(qwenDir, 'PROJECT_SUMMARY.md');
+      const summaryPath = path.join(agentDir, 'PROJECT_SUMMARY.md');
       const summaryContent = `${markdownSummary}
 
 ---
@@ -154,7 +154,7 @@ export const summaryCommand: SlashCommand = {
         summary: {
           isPending: false,
           stage: 'completed',
-          filePath: '.qwen/PROJECT_SUMMARY.md',
+          filePath: '.agent/PROJECT_SUMMARY.md',
         },
       };
       ui.addItem(completedSummaryItem, Date.now());

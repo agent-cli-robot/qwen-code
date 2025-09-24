@@ -19,8 +19,8 @@ vi.mock('fs', async (importOriginal) => {
 import { Storage } from './storage.js';
 
 describe('Storage – getGlobalSettingsPath', () => {
-  it('returns path to ~/.qwen/settings.json', () => {
-    const expected = path.join(os.homedir(), '.qwen', 'settings.json');
+  it('returns path to ~/.agent/settings.json', () => {
+    const expected = path.join(os.homedir(), '.agent', 'settings.json');
     expect(Storage.getGlobalSettingsPath()).toBe(expected);
   });
 });
@@ -29,23 +29,23 @@ describe('Storage – additional helpers', () => {
   const projectRoot = '/tmp/project';
   const storage = new Storage(projectRoot);
 
-  it('getWorkspaceSettingsPath returns project/.qwen/settings.json', () => {
-    const expected = path.join(projectRoot, '.qwen', 'settings.json');
+  it('getWorkspaceSettingsPath returns project/.agent/settings.json', () => {
+    const expected = path.join(projectRoot, '.agent', 'settings.json');
     expect(storage.getWorkspaceSettingsPath()).toBe(expected);
   });
 
-  it('getUserCommandsDir returns ~/.qwen/commands', () => {
-    const expected = path.join(os.homedir(), '.qwen', 'commands');
+  it('getUserCommandsDir returns ~/.agent/commands', () => {
+    const expected = path.join(os.homedir(), '.agent', 'commands');
     expect(Storage.getUserCommandsDir()).toBe(expected);
   });
 
-  it('getProjectCommandsDir returns project/.qwen/commands', () => {
-    const expected = path.join(projectRoot, '.qwen', 'commands');
+  it('getProjectCommandsDir returns project/.agent/commands', () => {
+    const expected = path.join(projectRoot, '.agent', 'commands');
     expect(storage.getProjectCommandsDir()).toBe(expected);
   });
 
-  it('getMcpOAuthTokensPath returns ~/.qwen/mcp-oauth-tokens.json', () => {
-    const expected = path.join(os.homedir(), '.qwen', 'mcp-oauth-tokens.json');
+  it('getMcpOAuthTokensPath returns ~/.agent/mcp-oauth-tokens.json', () => {
+    const expected = path.join(os.homedir(), '.agent', 'mcp-oauth-tokens.json');
     expect(Storage.getMcpOAuthTokensPath()).toBe(expected);
   });
 });

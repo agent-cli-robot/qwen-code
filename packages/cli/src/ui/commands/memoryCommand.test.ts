@@ -15,11 +15,11 @@ import {
   getErrorMessage,
   loadServerHierarchicalMemory,
   type FileDiscoveryService,
-} from '@qwen-code/qwen-code-core';
+} from '@agent-cli/agent-cli-core';
 
-vi.mock('@qwen-code/qwen-code-core', async (importOriginal) => {
+vi.mock('@agent-cli/agent-cli-core', async (importOriginal) => {
   const original =
-    await importOriginal<typeof import('@qwen-code/qwen-code-core')>();
+    await importOriginal<typeof import('@agent-cli/agent-cli-core')>();
   return {
     ...original,
     getErrorMessage: vi.fn((error: unknown) => {

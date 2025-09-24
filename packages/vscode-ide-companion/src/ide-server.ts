@@ -5,7 +5,7 @@
  */
 
 import * as vscode from 'vscode';
-import { IdeContextNotificationSchema } from '@qwen-code/qwen-code-core';
+import { IdeContextNotificationSchema } from '@agent-cli/agent-cli-core';
 import { isInitializeRequest } from '@modelcontextprotocol/sdk/types.js';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
@@ -20,8 +20,8 @@ import type { DiffManager } from './diff-manager.js';
 import { OpenFilesManager } from './open-files-manager.js';
 
 const MCP_SESSION_ID_HEADER = 'mcp-session-id';
-const IDE_SERVER_PORT_ENV_VAR = 'QWEN_CODE_IDE_SERVER_PORT';
-const IDE_WORKSPACE_PATH_ENV_VAR = 'QWEN_CODE_IDE_WORKSPACE_PATH';
+const IDE_SERVER_PORT_ENV_VAR = 'AGENT_CLI_IDE_SERVER_PORT';
+const IDE_WORKSPACE_PATH_ENV_VAR = 'AGENT_CLI_IDE_WORKSPACE_PATH';
 
 function writePortAndWorkspace(
   context: vscode.ExtensionContext,
@@ -286,7 +286,7 @@ export class IDEServer {
 const createMcpServer = (diffManager: DiffManager) => {
   const server = new McpServer(
     {
-      name: 'qwen-code-companion-mcp-server',
+      name: 'agent-cli-companion-mcp-server',
       version: '1.0.0',
     },
     { capabilities: { logging: {} } },

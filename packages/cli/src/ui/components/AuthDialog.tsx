@@ -6,7 +6,7 @@
 
 import type React from 'react';
 import { useState } from 'react';
-import { AuthType } from '@qwen-code/qwen-code-core';
+import { AuthType } from '@agent-cli/agent-cli-core';
 import { Box, Text } from 'ink';
 import {
   setOpenAIApiKey,

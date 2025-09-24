@@ -63,7 +63,7 @@ describe('oauth2', () => {
 
   beforeEach(() => {
     tempHomeDir = fs.mkdtempSync(
-      path.join(os.tmpdir(), 'qwen-code-test-home-'),
+      path.join(os.tmpdir(), 'agent-cli-test-home-'),
     );
     (os.homedir as Mock).mockReturnValue(tempHomeDir);
   });

@@ -1,13 +1,13 @@
 {
-  "name": "qwen-code-vscode-ide-companion",
-  "displayName": "Qwen Code Companion",
-  "description": "Enable Qwen Code with direct access to your VS Code workspace.",
-  "version": "0.0.13",
-  "publisher": "qwenlm",
+  "name": "agent-cli-vscode-ide-companion",
+  "displayName": "Agent CLI Companion",
+  "description": "Enable Agent CLI with direct access to your VS Code workspace.",
+  "version": "0.0.1",
+  "publisher": "agent-cli",
   "icon": "assets/icon.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/QwenLM/qwen-code.git",
+    "url": "https://github.com/agent-cli/agent-cli.git",
     "directory": "packages/vscode-ide-companion"
   },
   "engines": {
@@ -19,10 +19,9 @@
     "AI"
   ],
   "keywords": [
-    "qwen-code",
-    "qwen code",
-    "qwen",
-    "qwen code",
+    "agent-cli",
+    "agent cli",
+    "agent",
     "cli",
     "ide integration",
     "ide companion"
@@ -39,20 +38,20 @@
     "commands": [
       {
         "command": "qwen.diff.accept",
-        "title": "Qwen Code: Accept Current Diff",
+        "title": "Agent CLI: Accept Current Diff",
         "icon": "$(check)"
       },
       {
         "command": "qwen.diff.cancel",
-        "title": "Qwen Code: Close Diff Editor",
+        "title": "Agent CLI: Close Diff Editor",
         "icon": "$(close)"
       },
       {
-        "command": "qwen-code.runQwenCode",
+        "command": "agent-cli.runAgentCli",
         "title": "Qwen Code: Run"
       },
       {
-        "command": "qwen-code.showNotices",
+        "command": "agent-cli.showNotices",
         "title": "Qwen Code: View Third-Party Notices"
       }
     ],

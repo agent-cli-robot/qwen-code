@@ -20,7 +20,7 @@ import type {
   TaskResultDisplay,
   PlanResultDisplay,
   Config,
-} from '@qwen-code/qwen-code-core';
+} from '@agent-cli/agent-cli-core';
 import { AgentExecutionDisplay } from '../subagents/index.js';
 import { PlanSummaryDisplay } from '../PlanSummaryDisplay.js';
 

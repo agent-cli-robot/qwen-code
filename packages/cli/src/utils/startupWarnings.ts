@@ -7,9 +7,9 @@
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import { join as pathJoin } from 'node:path';
-import { getErrorMessage } from '@qwen-code/qwen-code-core';
+import { getErrorMessage } from '@agent-cli/agent-cli-core';
 
-const warningsFilePath = pathJoin(os.tmpdir(), 'qwen-code-warnings.txt');
+const warningsFilePath = pathJoin(os.tmpdir(), 'agent-cli-warnings.txt');
 
 export async function getStartupWarnings(): Promise<string[]> {
   try {

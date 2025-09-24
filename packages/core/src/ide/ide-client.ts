@@ -107,7 +107,7 @@ export class IdeClient {
     if (!this.currentIde || !this.currentIdeDisplayName) {
       this.setState(
         IDEConnectionStatus.Disconnected,
-        `IDE integration is not supported in your current environment. To use this feature, run Qwen Code in one of these supported IDEs: VS Code or VS Code forks`,
+        `IDE integration is not supported in your current environment. To use this feature, run Agent CLI in one of these supported IDEs: VS Code or VS Code forks`,
         false,
       );
       return;
@@ -118,7 +118,7 @@ export class IdeClient {
     const configFromFile = await this.getConnectionConfigFromFile();
     const workspacePath =
       configFromFile?.workspacePath ??
-      process.env['QWEN_CODE_IDE_WORKSPACE_PATH'];
+      process.env['AGENT_CLI_IDE_WORKSPACE_PATH'];
 
     const { isValid, error } = IdeClient.validateWorkspacePath(
       workspacePath,
@@ -330,7 +330,7 @@ export class IdeClient {
     if (!isWithinWorkspace) {
       return {
         isValid: false,
-        error: `Directory mismatch. Qwen Code is running in a different location than the open workspace in ${currentIdeDisplayName}. Please run the CLI from one of the following directories: ${ideWorkspacePaths.join(
+        error: `Directory mismatch. Agent CLI is running in a different location than the open workspace in ${currentIdeDisplayName}. Please run the CLI from one of the following directories: ${ideWorkspacePaths.join(
           ', ',
         )}`,
       };
@@ -339,7 +339,7 @@ export class IdeClient {
   }
 
   private getPortFromEnv(): string | undefined {
-    const port = process.env['QWEN_CODE_IDE_SERVER_PORT'];
+    const port = process.env['AGENT_CLI_IDE_SERVER_PORT'];
     if (!port) {
       return undefined;
     }
@@ -347,12 +347,12 @@ export class IdeClient {
   }
 
   private getStdioConfigFromEnv(): StdioConfig | undefined {
-    const command = process.env['QWEN_CODE_IDE_SERVER_STDIO_COMMAND'];
+    const command = process.env['AGENT_CLI_IDE_SERVER_STDIO_COMMAND'];
     if (!command) {
       return undefined;
     }
 
-    const argsStr = process.env['QWEN_CODE_IDE_SERVER_STDIO_ARGS'];
+    const argsStr = process.env['AGENT_CLI_IDE_SERVER_STDIO_ARGS'];
     let args: string[] = [];
     if (argsStr) {
       try {
@@ -361,11 +361,11 @@ export class IdeClient {
           args = parsedArgs;
         } else {
           logger.error(
-            'QWEN_CODE_IDE_SERVER_STDIO_ARGS must be a JSON array string.',
+            'AGENT_CLI_IDE_SERVER_STDIO_ARGS must be a JSON array string.',
           );
         }
       } catch (e) {
-        logger.error('Failed to parse QWEN_CODE_IDE_SERVER_STDIO_ARGS:', e);
+        logger.error('Failed to parse AGENT_CLI_IDE_SERVER_STDIO_ARGS:', e);
       }
     }
 
@@ -381,7 +381,7 @@ export class IdeClient {
     try {
       const portFile = path.join(
         os.tmpdir(),
-        `qwen-code-ide-server-${this.ideProcessInfo.pid}.json`,
+        `agent-cli-ide-server-${this.ideProcessInfo.pid}.json`,
       );
       const portFileContents = await fs.promises.readFile(portFile, 'utf8');
       return JSON.parse(portFileContents);

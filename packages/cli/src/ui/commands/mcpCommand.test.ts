@@ -13,15 +13,15 @@ import {
   getMCPServerStatus,
   getMCPDiscoveryState,
   DiscoveredMCPTool,
-} from '@qwen-code/qwen-code-core';
+} from '@agent-cli/agent-cli-core';
 
 import type { MessageActionReturn } from './types.js';
 import type { CallableTool } from '@google/genai';
 import { Type } from '@google/genai';
 
-vi.mock('@qwen-code/qwen-code-core', async (importOriginal) => {
+vi.mock('@agent-cli/agent-cli-core', async (importOriginal) => {
   const actual =
-    await importOriginal<typeof import('@qwen-code/qwen-code-core')>();
+    await importOriginal<typeof import('@agent-cli/agent-cli-core')>();
   return {
     ...actual,
     getMCPServerStatus: vi.fn(),
@@ -147,7 +147,7 @@ describe('mcpCommand', () => {
         type: 'message',
         messageType: 'info',
         content:
-          'No MCP servers configured. Please view MCP documentation in your browser: https://qwenlm.github.io/qwen-code-docs/en/tools/mcp-server/#how-to-set-up-your-mcp-server or use the cli /docs command',
+          'No MCP servers configured. Please view MCP documentation in your browser: https://agent-cli.github.io/docs/en/tools/mcp-server/#how-to-set-up-your-mcp-server or use the cli /docs command',
       });
     });
   });
@@ -891,7 +891,7 @@ describe('mcpCommand', () => {
       // Mock the reloadCommands function
       context.ui.reloadCommands = vi.fn();
 
-      const { MCPOAuthProvider } = await import('@qwen-code/qwen-code-core');
+      const { MCPOAuthProvider } = await import('@agent-cli/agent-cli-core');
 
       const authCommand = mcpCommand.subCommands?.find(
         (cmd) => cmd.name === 'auth',
@@ -927,7 +927,7 @@ describe('mcpCommand', () => {
         },
       });
 
-      const { MCPOAuthProvider } = await import('@qwen-code/qwen-code-core');
+      const { MCPOAuthProvider } = await import('@agent-cli/agent-cli-core');
       (
         MCPOAuthProvider.authenticate as ReturnType<typeof vi.fn>
       ).mockRejectedValue(new Error('Auth failed'));

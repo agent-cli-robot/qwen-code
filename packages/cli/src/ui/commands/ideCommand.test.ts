@@ -8,12 +8,12 @@ import type { MockInstance } from 'vitest';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { ideCommand } from './ideCommand.js';
 import { type CommandContext } from './types.js';
-import { type Config, DetectedIde } from '@qwen-code/qwen-code-core';
-import * as core from '@qwen-code/qwen-code-core';
+import { type Config, DetectedIde } from '@agent-cli/agent-cli-core';
+import * as core from '@agent-cli/agent-cli-core';
 
 vi.mock('child_process');
 vi.mock('glob');
-vi.mock('@qwen-code/qwen-code-core', async (importOriginal) => {
+vi.mock('@agent-cli/agent-cli-core', async (importOriginal) => {
   const original = await importOriginal<typeof core>();
   return {
     ...original,
