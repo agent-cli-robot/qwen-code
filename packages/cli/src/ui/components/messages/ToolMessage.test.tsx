@@ -14,8 +14,8 @@ import { StreamingContext } from '../../contexts/StreamingContext.js';
 import type { Config } from '@agent-cli/agent-cli-core';
 
 // Mock child components or utilities if they are complex or have side effects
-vi.mock('../GeminiRespondingSpinner.js', () => ({
-  GeminiRespondingSpinner: ({
+vi.mock('../AgentRespondingSpinner.js', () => ({
+  AgentRespondingSpinner: ({
     nonRespondingDisplay,
   }: {
     nonRespondingDisplay?: string;

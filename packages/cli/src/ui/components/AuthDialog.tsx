@@ -49,6 +49,9 @@ export function AuthDialog({
   const [showOpenAIKeyPrompt, setShowOpenAIKeyPrompt] = useState(false);
   const items = [
     { label: 'Qwen OAuth', value: AuthType.QWEN_OAUTH },
+    { label: 'Google OAuth', value: AuthType.LOGIN_WITH_GOOGLE },
+    { label: 'Google API Key', value: AuthType.USE_GEMINI },
+    { label: 'VertexAI (Google Cloud)', value: AuthType.USE_VERTEX_AI },
     { label: 'OpenAI', value: AuthType.USE_OPENAI },
   ];
 
@@ -70,7 +73,7 @@ export function AuthDialog({
         return item.value === AuthType.USE_GEMINI;
       }
 
-      return item.value === AuthType.LOGIN_WITH_GOOGLE;
+      return item.value === AuthType.QWEN_OAUTH;
     }),
   );
 
