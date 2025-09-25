@@ -479,7 +479,7 @@ export class Config {
       existingHistory = this.geminiClient.getHistory();
     }
 
-    // Create new content generator config
+    // Create new content generator config - this will use default model for the auth type
     const newContentGeneratorConfig = createContentGeneratorConfig(
       this,
       authMethod,
@@ -506,7 +506,7 @@ export class Config {
       });
     }
 
-    // Reset the session flag since we're explicitly changing auth and using default model
+    // Reset the session flag since we're explicitly changing auth
     this.inFallbackMode = false;
 
     this.authType = authMethod;

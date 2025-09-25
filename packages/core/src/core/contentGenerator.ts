@@ -91,8 +91,28 @@ export function createContentGeneratorConfig(
   const openaiBaseUrl = process.env['OPENAI_BASE_URL'] || undefined;
   const openaiModel = process.env['OPENAI_MODEL'] || undefined;
 
-  // Use runtime model from config if available; otherwise, fall back to parameter or default
-  const effectiveModel = config.getModel() || DEFAULT_GEMINI_MODEL;
+  // Determine default model based on auth type, not the current config model
+  // This ensures that when auth type changes, we use the appropriate default model for that auth type
+  let defaultModelForAuthType: string;
+  switch (authType) {
+    case AuthType.USE_OPENAI:
+      defaultModelForAuthType = openaiModel || DEFAULT_QWEN_MODEL;
+      break;
+    case AuthType.QWEN_OAUTH:
+      defaultModelForAuthType = process.env['QWEN_MODEL'] || DEFAULT_QWEN_MODEL;
+      break;
+    case AuthType.LOGIN_WITH_GOOGLE:
+    case AuthType.CLOUD_SHELL:
+    case AuthType.USE_GEMINI:
+    case AuthType.USE_VERTEX_AI:
+    default:
+      defaultModelForAuthType = DEFAULT_GEMINI_MODEL;
+      break;
+  }
+
+  // Use runtime model from config if available AND if it's compatible with the new auth type, otherwise use default for auth type
+  // However, for a clean auth switch, we should force the default model for the new auth type
+  const effectiveModel = defaultModelForAuthType;
 
   const contentGeneratorConfig: ContentGeneratorConfig = {
     model: effectiveModel,

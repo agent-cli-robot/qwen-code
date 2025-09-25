@@ -15,6 +15,7 @@ import { CommandKind } from './types.js';
 import {
   AVAILABLE_MODELS_QWEN,
   getOpenAIAvailableModelFromEnv,
+  getFilteredGeminiModels,
   type AvailableModel,
 } from '../models/availableModels.js';
 
@@ -26,6 +27,11 @@ function getAvailableModelsForAuthType(authType: AuthType): AvailableModel[] {
       const openAIModel = getOpenAIAvailableModelFromEnv();
       return openAIModel ? [openAIModel] : [];
     }
+    case AuthType.USE_GEMINI:
+    case AuthType.LOGIN_WITH_GOOGLE:
+    case AuthType.CLOUD_SHELL:
+    case AuthType.USE_VERTEX_AI:
+      return getFilteredGeminiModels(true); // Vision models enabled by default for this command
     default:
       // For other auth types, return empty array for now
       // This can be expanded later according to the design doc
