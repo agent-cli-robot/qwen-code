@@ -83,7 +83,7 @@ import process from 'node:process';
 import type { EditorType, Config, IdeContext } from '@agent-cli/agent-cli-core';
 import {
   ApprovalMode,
-  getAllGeminiMdFilenames,
+  getAllAgentMdFilenames,
   isEditorAvailable,
   getErrorMessage,
   AuthType,
@@ -219,7 +219,7 @@ const App = ({ config, settings, startupWarnings = [], version }: AppProps) => {
     setStaticKey((prev) => prev + 1);
   }, [setStaticKey, stdout]);
 
-  const [geminiMdFileCount, setGeminiMdFileCount] = useState<number>(0);
+  const [agentMdFileCount, setAgentMdFileCount] = useState<number>(0);
   const [debugMessage, setDebugMessage] = useState<string>('');
   const [themeError, setThemeError] = useState<string | null>(null);
   const [authError, setAuthError] = useState<string | null>(null);
@@ -429,7 +429,7 @@ const App = ({ config, settings, startupWarnings = [], version }: AppProps) => {
     addItem(
       {
         type: MessageType.INFO,
-        text: 'Refreshing hierarchical memory (QWEN.md or other context files)...',
+        text: 'Refreshing hierarchical memory (AGENTS.md or other context files)...',
       },
       Date.now(),
     );
@@ -448,8 +448,8 @@ const App = ({ config, settings, startupWarnings = [], version }: AppProps) => {
       );
 
       config.setUserMemory(memoryContent);
-      config.setGeminiMdFileCount(fileCount);
-      setGeminiMdFileCount(fileCount);
+      config.setAgentMdFileCount(fileCount);
+      setAgentMdFileCount(fileCount);
 
       addItem(
         {
@@ -732,7 +732,7 @@ const App = ({ config, settings, startupWarnings = [], version }: AppProps) => {
     openAgentsManagerDialog,
     toggleVimEnabled,
     setIsProcessing,
-    setGeminiMdFileCount,
+    setAgentMdFileCount,
     showQuitConfirmation,
   );
 
@@ -1019,9 +1019,9 @@ const App = ({ config, settings, startupWarnings = [], version }: AppProps) => {
 
   useEffect(() => {
     if (config) {
-      setGeminiMdFileCount(config.getGeminiMdFileCount());
+      setAgentMdFileCount(config.getAgentMdFileCount());
     }
-  }, [config, config.getGeminiMdFileCount]);
+  }, [config, config.getAgentMdFileCount]);
 
   const logger = useLogger(config.storage);
 
@@ -1130,7 +1130,7 @@ const App = ({ config, settings, startupWarnings = [], version }: AppProps) => {
     if (fromSettings) {
       return Array.isArray(fromSettings) ? fromSettings : [fromSettings];
     }
-    return getAllGeminiMdFilenames();
+    return getAllAgentMdFilenames();
   }, [settings.merged.context?.fileName]);
 
   const initialPrompt = useMemo(() => config.getQuestion(), [config]);
@@ -1525,7 +1525,7 @@ const App = ({ config, settings, startupWarnings = [], version }: AppProps) => {
                   ) : (
                     <ContextSummaryDisplay
                       ideContext={ideContextState}
-                      geminiMdFileCount={geminiMdFileCount}
+                      agentMdFileCount={agentMdFileCount}
                       contextFileNames={contextFileNames}
                       mcpServers={config.getMcpServers()}
                       blockedMcpServers={config.getBlockedMcpServers()}

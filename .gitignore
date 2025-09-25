@@ -48,7 +48,7 @@ logs/
 # GHA credentials
 gha-creds-*.json
 
-QWEN.md
+AGENTS.md
 
 
 # agent-cli settings

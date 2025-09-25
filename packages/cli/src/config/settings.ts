@@ -9,7 +9,7 @@ import * as path from 'node:path';
 import { homedir, platform } from 'node:os';
 import * as dotenv from 'dotenv';
 import {
-  GEMINI_CONFIG_DIR as GEMINI_DIR,
+  AGENT_CONFIG_DIR as AGENT_DIR,
   getErrorMessage,
   Storage,
 } from '@agent-cli/agent-cli-core';
@@ -552,10 +552,10 @@ function resolveEnvVarsInObject<T>(obj: T): T {
 function findEnvFile(startDir: string): string | null {
   let currentDir = path.resolve(startDir);
   while (true) {
-    // prefer gemini-specific .env under GEMINI_DIR
-    const geminiEnvPath = path.join(currentDir, GEMINI_DIR, '.env');
-    if (fs.existsSync(geminiEnvPath)) {
-      return geminiEnvPath;
+    // prefer agent-specific .env under AGENT_DIR
+    const agentEnvPath = path.join(currentDir, AGENT_DIR, '.env');
+    if (fs.existsSync(agentEnvPath)) {
+      return agentEnvPath;
     }
     const envPath = path.join(currentDir, '.env');
     if (fs.existsSync(envPath)) {
@@ -563,10 +563,10 @@ function findEnvFile(startDir: string): string | null {
     }
     const parentDir = path.dirname(currentDir);
     if (parentDir === currentDir || !parentDir) {
-      // check .env under home as fallback, again preferring gemini-specific .env
-      const homeGeminiEnvPath = path.join(homedir(), GEMINI_DIR, '.env');
-      if (fs.existsSync(homeGeminiEnvPath)) {
-        return homeGeminiEnvPath;
+      // check .env under home as fallback, again preferring agent-specific .env
+      const homeAgentEnvPath = path.join(homedir(), AGENT_DIR, '.env');
+      if (fs.existsSync(homeAgentEnvPath)) {
+        return homeAgentEnvPath;
       }
       const homeEnvPath = path.join(homedir(), '.env');
       if (fs.existsSync(homeEnvPath)) {
@@ -640,7 +640,7 @@ export function loadEnvironment(settings?: Settings): void {
       const excludedVars =
         resolvedSettings?.advanced?.excludedEnvVars ||
         DEFAULT_EXCLUDED_ENV_VARS;
-      const isProjectEnvFile = !envFilePath.includes(GEMINI_DIR);
+      const isProjectEnvFile = !envFilePath.includes(AGENT_DIR);
 
       for (const key in parsedEnv) {
         if (Object.hasOwn(parsedEnv, key)) {

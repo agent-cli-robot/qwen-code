@@ -56,7 +56,7 @@ interface MockServerConfig {
   mcpServers?: Record<string, MCPServerConfig>; // Use imported MCPServerConfig
   userAgent: string;
   userMemory: string;
-  geminiMdFileCount: number;
+  agentMdFileCount: number;
   approvalMode: ApprovalMode;
   vertexai?: boolean;
   showMemoryUsage?: boolean;
@@ -87,8 +87,8 @@ interface MockServerConfig {
   getUserAgent: Mock<() => string>;
   getUserMemory: Mock<() => string>;
   setUserMemory: Mock<(newUserMemory: string) => void>;
-  getGeminiMdFileCount: Mock<() => number>;
-  setGeminiMdFileCount: Mock<(count: number) => void>;
+  getAgentMdFileCount: Mock<() => number>;
+  setAgentMdFileCount: Mock<(count: number) => void>;
   getApprovalMode: Mock<() => ApprovalMode>;
   setApprovalMode: Mock<(skip: ApprovalMode) => void>;
   getVertexAI: Mock<() => boolean | undefined>;
@@ -98,7 +98,7 @@ interface MockServerConfig {
   getEnablePromptCompletion: Mock<() => boolean>;
   getGeminiClient: Mock<() => GeminiClient | undefined>;
   getCheckpointingEnabled: Mock<() => boolean>;
-  getAllGeminiMdFilenames: Mock<() => string[]>;
+  getAllAgentMdFilenames: Mock<() => string[]>;
   setFlashFallbackHandler: Mock<(handler: (fallback: boolean) => void) => void>;
   getSessionId: Mock<() => string>;
   getUserTier: Mock<() => Promise<string | undefined>>;
@@ -149,7 +149,7 @@ vi.mock('@agent-cli/agent-cli-core', async (importOriginal) => {
         mcpServers: opts.mcpServers,
         userAgent: opts.userAgent || 'test-agent',
         userMemory: opts.userMemory || '',
-        geminiMdFileCount: opts.geminiMdFileCount || 0,
+        agentMdFileCount: opts.agentMdFileCount || 0,
         approvalMode: opts.approvalMode ?? ApprovalMode.DEFAULT,
         vertexai: opts.vertexai,
         showMemoryUsage: opts.showMemoryUsage ?? false,
@@ -175,8 +175,8 @@ vi.mock('@agent-cli/agent-cli-core', async (importOriginal) => {
         getUserAgent: vi.fn(() => opts.userAgent || 'test-agent'),
         getUserMemory: vi.fn(() => opts.userMemory || ''),
         setUserMemory: vi.fn(),
-        getGeminiMdFileCount: vi.fn(() => opts.geminiMdFileCount || 0),
-        setGeminiMdFileCount: vi.fn(),
+        getAgentMdFileCount: vi.fn(() => opts.agentMdFileCount || 0),
+        setAgentMdFileCount: vi.fn(),
         getApprovalMode: vi.fn(() => opts.approvalMode ?? ApprovalMode.DEFAULT),
         setApprovalMode: vi.fn(),
         getVertexAI: vi.fn(() => opts.vertexai),
@@ -188,7 +188,7 @@ vi.mock('@agent-cli/agent-cli-core', async (importOriginal) => {
           getUserTier: vi.fn(),
         })),
         getCheckpointingEnabled: vi.fn(() => opts.checkpointing ?? true),
-        getAllGeminiMdFilenames: vi.fn(() => ['QWEN.md']),
+        getAllAgentMdFilenames: vi.fn(() => ['AGENTS.md']),
         setFlashFallbackHandler: vi.fn(),
         getSessionId: vi.fn(() => 'test-session-id'),
         getUserTier: vi.fn().mockResolvedValue(undefined),
@@ -217,7 +217,7 @@ vi.mock('@agent-cli/agent-cli-core', async (importOriginal) => {
     ...actualCore,
     Config: ConfigClassMock,
     MCPServerConfig: actualCore.MCPServerConfig,
-    getAllGeminiMdFilenames: vi.fn(() => ['QWEN.md']),
+    getAllAgentMdFilenames: vi.fn(() => ['AGENTS.md']),
     ideContext: ideContextMock,
     isGitRepository: vi.fn(),
   };
@@ -360,7 +360,7 @@ describe('App UI', () => {
       targetDir: '/test/dir',
       debugMode: false,
       userMemory: '',
-      geminiMdFileCount: 0,
+      agentMdFileCount: 0,
       showMemoryUsage: false,
       sessionId: 'test-session-id',
       cwd: '/tmp',
@@ -673,8 +673,8 @@ describe('App UI', () => {
         ],
       },
     });
-    mockConfig.getGeminiMdFileCount.mockReturnValue(1);
-    mockConfig.getAllGeminiMdFilenames.mockReturnValue(['QWEN.md']);
+    mockConfig.getAgentMdFileCount.mockReturnValue(1);
+    mockConfig.getAllAgentMdFilenames.mockReturnValue(['AGENTS.md']);
 
     const { lastFrame, unmount } = renderWithProviders(
       <App
@@ -686,13 +686,13 @@ describe('App UI', () => {
     currentUnmount = unmount;
     await Promise.resolve();
     expect(lastFrame()).toContain(
-      'Using: 1 open file (ctrl+g to view) | 1 QWEN.md file',
+      'Using: 1 open file (ctrl+g to view) | 1 AGENTS.md file',
     );
   });
 
-  it('should display default "QWEN.md" in footer when contextFileName is not set and count is 1', async () => {
-    mockConfig.getGeminiMdFileCount.mockReturnValue(1);
-    mockConfig.getAllGeminiMdFilenames.mockReturnValue(['QWEN.md']);
+  it('should display default "AGENTS.md" in footer when contextFileName is not set and count is 1', async () => {
+    mockConfig.getAgentMdFileCount.mockReturnValue(1);
+    mockConfig.getAllAgentMdFilenames.mockReturnValue(['AGENTS.md']);
     // For this test, ensure showMemoryUsage is false or debugMode is false if it relies on that
     mockConfig.getDebugMode.mockReturnValue(false);
     mockConfig.getShowMemoryUsage.mockReturnValue(false);
@@ -706,12 +706,15 @@ describe('App UI', () => {
     );
     currentUnmount = unmount;
     await Promise.resolve(); // Wait for any async updates
-    expect(lastFrame()).toContain('Using: 1 QWEN.md file');
+    expect(lastFrame()).toContain('Using: 1 AGENTS.md file');
   });
 
-  it('should display default "QWEN.md" with plural when contextFileName is not set and count is > 1', async () => {
-    mockConfig.getGeminiMdFileCount.mockReturnValue(2);
-    mockConfig.getAllGeminiMdFilenames.mockReturnValue(['QWEN.md', 'QWEN.md']);
+  it('should display default "AGENTS.md" with plural when contextFileName is not set and count is > 1', async () => {
+    mockConfig.getAgentMdFileCount.mockReturnValue(2);
+    mockConfig.getAllAgentMdFilenames.mockReturnValue([
+      'AGENTS.md',
+      'AGENTS.md',
+    ]);
     mockConfig.getDebugMode.mockReturnValue(false);
     mockConfig.getShowMemoryUsage.mockReturnValue(false);
 
@@ -724,7 +727,7 @@ describe('App UI', () => {
     );
     currentUnmount = unmount;
     await Promise.resolve();
-    expect(lastFrame()).toContain('Using: 2 QWEN.md files');
+    expect(lastFrame()).toContain('Using: 2 AGENTS.md files');
   });
 
   it('should display custom contextFileName in footer when set and count is 1', async () => {
@@ -734,8 +737,8 @@ describe('App UI', () => {
         ui: { theme: 'Default' },
       },
     });
-    mockConfig.getGeminiMdFileCount.mockReturnValue(1);
-    mockConfig.getAllGeminiMdFilenames.mockReturnValue(['AGENTS.md']);
+    mockConfig.getAgentMdFileCount.mockReturnValue(1);
+    mockConfig.getAllAgentMdFilenames.mockReturnValue(['AGENTS.md']);
     mockConfig.getDebugMode.mockReturnValue(false);
     mockConfig.getShowMemoryUsage.mockReturnValue(false);
 
@@ -758,8 +761,8 @@ describe('App UI', () => {
         ui: { theme: 'Default' },
       },
     });
-    mockConfig.getGeminiMdFileCount.mockReturnValue(2);
-    mockConfig.getAllGeminiMdFilenames.mockReturnValue([
+    mockConfig.getAgentMdFileCount.mockReturnValue(2);
+    mockConfig.getAllAgentMdFilenames.mockReturnValue([
       'AGENTS.md',
       'CONTEXT.md',
     ]);
@@ -785,8 +788,8 @@ describe('App UI', () => {
         ui: { theme: 'Default' },
       },
     });
-    mockConfig.getGeminiMdFileCount.mockReturnValue(3);
-    mockConfig.getAllGeminiMdFilenames.mockReturnValue([
+    mockConfig.getAgentMdFileCount.mockReturnValue(3);
+    mockConfig.getAllAgentMdFilenames.mockReturnValue([
       'MY_NOTES.TXT',
       'MY_NOTES.TXT',
       'MY_NOTES.TXT',
@@ -813,8 +816,8 @@ describe('App UI', () => {
         ui: { theme: 'Default' },
       },
     });
-    mockConfig.getGeminiMdFileCount.mockReturnValue(0);
-    mockConfig.getAllGeminiMdFilenames.mockReturnValue([]);
+    mockConfig.getAgentMdFileCount.mockReturnValue(0);
+    mockConfig.getAllAgentMdFilenames.mockReturnValue([]);
     mockConfig.getDebugMode.mockReturnValue(false);
     mockConfig.getShowMemoryUsage.mockReturnValue(false);
 
@@ -830,9 +833,12 @@ describe('App UI', () => {
     expect(lastFrame()).not.toContain('ANY_FILE.MD');
   });
 
-  it('should display QWEN.md and MCP server count when both are present', async () => {
-    mockConfig.getGeminiMdFileCount.mockReturnValue(2);
-    mockConfig.getAllGeminiMdFilenames.mockReturnValue(['QWEN.md', 'QWEN.md']);
+  it('should display AGENTS.md and MCP server count when both are present', async () => {
+    mockConfig.getAgentMdFileCount.mockReturnValue(2);
+    mockConfig.getAllAgentMdFilenames.mockReturnValue([
+      'AGENTS.md',
+      'AGENTS.md',
+    ]);
     mockConfig.getMcpServers.mockReturnValue({
       server1: {} as MCPServerConfig,
     });
@@ -851,9 +857,9 @@ describe('App UI', () => {
     expect(lastFrame()).toContain('1 MCP server');
   });
 
-  it('should display only MCP server count when QWEN.md count is 0', async () => {
-    mockConfig.getGeminiMdFileCount.mockReturnValue(0);
-    mockConfig.getAllGeminiMdFilenames.mockReturnValue([]);
+  it('should display only MCP server count when AGENTS.md count is 0', async () => {
+    mockConfig.getAgentMdFileCount.mockReturnValue(0);
+    mockConfig.getAllAgentMdFilenames.mockReturnValue([]);
     mockConfig.getMcpServers.mockReturnValue({
       server1: {} as MCPServerConfig,
       server2: {} as MCPServerConfig,

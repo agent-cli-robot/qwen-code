@@ -157,7 +157,7 @@ describe('useSlashCommandProcessor', () => {
         vi.fn(), // openAgentsManagerDialog
         vi.fn(), // toggleVimEnabled
         setIsProcessing,
-        vi.fn(), // setGeminiMdFileCount
+        vi.fn(), // setAgentMdFileCount
         vi.fn(), // _showQuitConfirmation
       ),
     );
@@ -928,7 +928,7 @@ describe('useSlashCommandProcessor', () => {
           vi.fn(), // openAgentsManagerDialog
           vi.fn(), // toggleVimEnabled
           vi.fn(), // setIsProcessing
-          vi.fn(), // setGeminiMdFileCount
+          vi.fn(), // setAgentMdFileCount
           vi.fn(), // _showQuitConfirmation
         ),
       );

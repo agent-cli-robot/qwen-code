@@ -333,7 +333,7 @@ describe('SettingsUtils', () => {
         // Should include nested settings marked for dialog
         expect(dialogKeys).toContain('context.fileFiltering.respectGitIgnore');
         expect(dialogKeys).toContain(
-          'context.fileFiltering.respectGeminiIgnore',
+          'context.fileFiltering.respectAgentIgnore',
         );
         expect(dialogKeys).toContain(
           'context.fileFiltering.enableRecursiveFileSearch',

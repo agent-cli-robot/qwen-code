@@ -59,7 +59,7 @@ export interface CommandContext {
     /** Toggles a special display mode. */
     toggleCorgiMode: () => void;
     toggleVimEnabled: () => Promise<boolean>;
-    setGeminiMdFileCount: (count: number) => void;
+    setAgentMdFileCount: (count: number) => void;
     reloadCommands: () => void;
   };
   // Session-specific data

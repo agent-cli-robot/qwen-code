@@ -48,19 +48,19 @@ describe('memoryCommand', () => {
   describe('/memory show', () => {
     let showCommand: SlashCommand;
     let mockGetUserMemory: Mock;
-    let mockGetGeminiMdFileCount: Mock;
+    let mockGetAgentMdFileCount: Mock;
 
     beforeEach(() => {
       showCommand = getSubCommand('show');
 
       mockGetUserMemory = vi.fn();
-      mockGetGeminiMdFileCount = vi.fn();
+      mockGetAgentMdFileCount = vi.fn();
 
       mockContext = createMockCommandContext({
         services: {
           config: {
             getUserMemory: mockGetUserMemory,
-            getGeminiMdFileCount: mockGetGeminiMdFileCount,
+            getAgentMdFileCount: mockGetAgentMdFileCount,
           },
         },
       });
@@ -70,7 +70,7 @@ describe('memoryCommand', () => {
       if (!showCommand.action) throw new Error('Command has no action');
 
       mockGetUserMemory.mockReturnValue('');
-      mockGetGeminiMdFileCount.mockReturnValue(0);
+      mockGetAgentMdFileCount.mockReturnValue(0);
 
       await showCommand.action(mockContext, '');
 
@@ -89,7 +89,7 @@ describe('memoryCommand', () => {
       const memoryContent = 'This is a test memory.';
 
       mockGetUserMemory.mockReturnValue(memoryContent);
-      mockGetGeminiMdFileCount.mockReturnValue(1);
+      mockGetAgentMdFileCount.mockReturnValue(1);
 
       await showCommand.action(mockContext, '');
 
@@ -204,15 +204,15 @@ describe('memoryCommand', () => {
   describe('/memory refresh', () => {
     let refreshCommand: SlashCommand;
     let mockSetUserMemory: Mock;
-    let mockSetGeminiMdFileCount: Mock;
+    let mockSetAgentMdFileCount: Mock;
 
     beforeEach(() => {
       refreshCommand = getSubCommand('refresh');
       mockSetUserMemory = vi.fn();
-      mockSetGeminiMdFileCount = vi.fn();
+      mockSetAgentMdFileCount = vi.fn();
       const mockConfig = {
         setUserMemory: mockSetUserMemory,
-        setGeminiMdFileCount: mockSetGeminiMdFileCount,
+        setAgentMdFileCount: mockSetAgentMdFileCount,
         getWorkingDir: () => '/test/dir',
         getDebugMode: () => false,
         getFileService: () => ({}) as FileDiscoveryService,
@@ -263,7 +263,7 @@ describe('memoryCommand', () => {
       expect(mockSetUserMemory).toHaveBeenCalledWith(
         refreshResult.memoryContent,
       );
-      expect(mockSetGeminiMdFileCount).toHaveBeenCalledWith(
+      expect(mockSetAgentMdFileCount).toHaveBeenCalledWith(
         refreshResult.fileCount,
       );
 
@@ -286,7 +286,7 @@ describe('memoryCommand', () => {
 
       expect(loadServerHierarchicalMemory).toHaveBeenCalledOnce();
       expect(mockSetUserMemory).toHaveBeenCalledWith('');
-      expect(mockSetGeminiMdFileCount).toHaveBeenCalledWith(0);
+      expect(mockSetAgentMdFileCount).toHaveBeenCalledWith(0);
 
       expect(mockContext.ui.addItem).toHaveBeenCalledWith(
         {
@@ -307,7 +307,7 @@ describe('memoryCommand', () => {
 
       expect(loadServerHierarchicalMemory).toHaveBeenCalledOnce();
       expect(mockSetUserMemory).not.toHaveBeenCalled();
-      expect(mockSetGeminiMdFileCount).not.toHaveBeenCalled();
+      expect(mockSetAgentMdFileCount).not.toHaveBeenCalled();
 
       expect(mockContext.ui.addItem).toHaveBeenCalledWith(
         {

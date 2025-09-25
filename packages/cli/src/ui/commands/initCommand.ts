@@ -11,7 +11,7 @@ import type {
   SlashCommand,
   SlashCommandActionReturn,
 } from './types.js';
-import { getCurrentGeminiMdFilename } from '@agent-cli/agent-cli-core';
+import { getCurrentAgentMdFilename } from '@agent-cli/agent-cli-core';
 import { CommandKind } from './types.js';
 import { Text } from 'ink';
 import React from 'react';
@@ -32,7 +32,7 @@ export const initCommand: SlashCommand = {
       };
     }
     const targetDir = context.services.config.getTargetDir();
-    const contextFileName = getCurrentGeminiMdFilename();
+    const contextFileName = getCurrentAgentMdFilename();
     const contextFilePath = path.join(targetDir, contextFileName);
 
     try {

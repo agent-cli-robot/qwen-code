@@ -10,7 +10,7 @@ import os from 'node:os';
 import { ToolNames } from '../tools/tool-names.js';
 import process from 'node:process';
 import { isGitRepository } from '../utils/gitUtils.js';
-import { GEMINI_CONFIG_DIR } from '../tools/memoryTool.js';
+import { AGENT_CONFIG_DIR } from '../tools/memoryTool.js';
 import type { GenerateContentConfig } from '@google/genai';
 
 export interface ModelTemplateMapping {
@@ -88,7 +88,7 @@ export function getCoreSystemPrompt(
   // if GEMINI_SYSTEM_MD is set (and not 0|false), override system prompt from file
   // default path is .gemini/system.md but can be modified via custom path in GEMINI_SYSTEM_MD
   let systemMdEnabled = false;
-  let systemMdPath = path.resolve(path.join(GEMINI_CONFIG_DIR, 'system.md'));
+  let systemMdPath = path.resolve(path.join(AGENT_CONFIG_DIR, 'system.md'));
   const systemMdVar = process.env['GEMINI_SYSTEM_MD'];
   if (systemMdVar) {
     const systemMdVarLower = systemMdVar.toLowerCase();

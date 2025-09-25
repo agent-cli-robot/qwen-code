@@ -446,7 +446,7 @@ export const SETTINGS_SCHEMA = {
             description: 'Respect .gitignore files when searching',
             showInDialog: true,
           },
-          respectGeminiIgnore: {
+          respectAgentIgnore: {
             type: 'boolean',
             label: 'Respect .agentignore',
             category: 'Context',

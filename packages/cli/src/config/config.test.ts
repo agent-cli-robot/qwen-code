@@ -99,11 +99,11 @@ vi.mock('@agent-cli/agent-cli-core', async () => {
     ),
     DEFAULT_MEMORY_FILE_FILTERING_OPTIONS: {
       respectGitIgnore: false,
-      respectGeminiIgnore: true,
+      respectAgentIgnore: true,
     },
     DEFAULT_FILE_FILTERING_OPTIONS: {
       respectGitIgnore: true,
-      respectGeminiIgnore: true,
+      respectAgentIgnore: true,
     },
   };
 });
@@ -726,7 +726,7 @@ describe('Hierarchical Memory Loading (config.ts) - Placeholder Suite', () => {
       'tree',
       {
         respectGitIgnore: false,
-        respectGeminiIgnore: true,
+        respectAgentIgnore: true,
       },
       undefined, // maxDirs
     );
