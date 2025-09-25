@@ -110,8 +110,8 @@ export const directoryCommand: SlashCommand = {
                 context.services.settings.merged.context?.discoveryMaxDirs,
               );
             config.setUserMemory(memoryContent);
-            config.setGeminiMdFileCount(fileCount);
-            context.ui.setGeminiMdFileCount(fileCount);
+            config.setAgentMdFileCount(fileCount);
+            context.ui.setAgentMdFileCount(fileCount);
           }
           addItem(
             {

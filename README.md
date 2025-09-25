@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Agent CLI Screenshot](./docs/assets/qwen-screenshot.png)
+![Agent CLI Screenshot](./docs/assets/agent-screenshot.png)
 
 [![npm version](https://img.shields.io/npm/v/@agent-cli/agent-cli.svg)](https://www.npmjs.com/package/@agent-cli/agent-cli)
 [![License](https://img.shields.io/github/license/agent-cli/agent-cli.svg)](./LICENSE)

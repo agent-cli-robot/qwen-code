@@ -10,8 +10,8 @@ import * as path from 'node:path';
 import { homedir } from 'node:os';
 import { bfsFileSearch } from './bfsFileSearch.js';
 import {
-  GEMINI_CONFIG_DIR,
-  getAllGeminiMdFilenames,
+  AGENT_CONFIG_DIR,
+  getAllAgentMdFilenames,
 } from '../tools/memoryTool.js';
 import type { FileDiscoveryService } from '../services/fileDiscoveryService.js';
 import { processImports } from './memoryImportProcessor.js';
@@ -31,7 +31,7 @@ const logger = {
     console.error('[ERROR] [MemoryDiscovery]', ...args),
 };
 
-interface GeminiFileContent {
+interface AgentFileContent {
   filePath: string;
   content: string | null;
 }
@@ -80,9 +80,9 @@ async function findProjectRoot(startDir: string): Promise<string | null> {
   }
 }
 
-async function getGeminiMdFilePathsInternal(
+async function getAgentMdFilePathsInternal(
   currentWorkingDirectory: string,
-  includeDirectoriesToReadGemini: readonly string[],
+  includeDirectoriesToReadAgent: readonly string[],
   userHomePath: string,
   debugMode: boolean,
   fileService: FileDiscoveryService,
@@ -91,7 +91,7 @@ async function getGeminiMdFilePathsInternal(
   maxDirs: number,
 ): Promise<string[]> {
   const dirs = new Set<string>([
-    ...includeDirectoriesToReadGemini,
+    ...includeDirectoriesToReadAgent,
     currentWorkingDirectory,
   ]);
 
@@ -103,7 +103,7 @@ async function getGeminiMdFilePathsInternal(
   for (let i = 0; i < dirsArray.length; i += CONCURRENT_LIMIT) {
     const batch = dirsArray.slice(i, i + CONCURRENT_LIMIT);
     const batchPromises = batch.map((dir) =>
-      getGeminiMdFilePathsInternalForEachDir(
+      getAgentMdFilePathsInternalForEachDir(
         dir,
         userHomePath,
         debugMode,
@@ -132,7 +132,7 @@ async function getGeminiMdFilePathsInternal(
   return Array.from(new Set<string>(paths));
 }
 
-async function getGeminiMdFilePathsInternalForEachDir(
+async function getAgentMdFilePathsInternalForEachDir(
   dir: string,
   userHomePath: string,
   debugMode: boolean,
@@ -142,14 +142,14 @@ async function getGeminiMdFilePathsInternalForEachDir(
   maxDirs: number,
 ): Promise<string[]> {
   const allPaths = new Set<string>();
-  const geminiMdFilenames = getAllGeminiMdFilenames();
+  const agentMdFilenames = getAllAgentMdFilenames();
 
-  for (const geminiMdFilename of geminiMdFilenames) {
+  for (const agentMdFilename of agentMdFilenames) {
     const resolvedHome = path.resolve(userHomePath);
     const globalMemoryPath = path.join(
       resolvedHome,
-      GEMINI_CONFIG_DIR,
-      geminiMdFilename,
+      AGENT_CONFIG_DIR,
+      agentMdFilename,
     );
 
     // This part that finds the global file always runs.
@@ -158,7 +158,7 @@ async function getGeminiMdFilePathsInternalForEachDir(
       allPaths.add(globalMemoryPath);
       if (debugMode)
         logger.debug(
-          `Found readable global ${geminiMdFilename}: ${globalMemoryPath}`,
+          `Found readable global ${agentMdFilename}: ${globalMemoryPath}`,
         );
     } catch {
       // It's okay if it's not found.
@@ -169,15 +169,15 @@ async function getGeminiMdFilePathsInternalForEachDir(
     const isHomeDirectory = resolvedDir === resolvedHome;
 
     if (isHomeDirectory) {
-      // For home directory, only check for QWEN.md directly in the home directory
-      const homeContextPath = path.join(resolvedHome, geminiMdFilename);
+      // For home directory, only check for AGENTS.md directly in the home directory
+      const homeContextPath = path.join(resolvedHome, agentMdFilename);
       try {
         await fs.access(homeContextPath, fsSync.constants.R_OK);
         if (homeContextPath !== globalMemoryPath) {
           allPaths.add(homeContextPath);
           if (debugMode)
             logger.debug(
-              `Found readable home ${geminiMdFilename}: ${homeContextPath}`,
+              `Found readable home ${agentMdFilename}: ${homeContextPath}`,
             );
         }
       } catch {
@@ -189,7 +189,7 @@ async function getGeminiMdFilePathsInternalForEachDir(
       const resolvedCwd = path.resolve(dir);
       if (debugMode)
         logger.debug(
-          `Searching for ${geminiMdFilename} starting from CWD: ${resolvedCwd}`,
+          `Searching for ${agentMdFilename} starting from CWD: ${resolvedCwd}`,
         );
 
       const projectRoot = await findProjectRoot(resolvedCwd);
@@ -203,11 +203,11 @@ async function getGeminiMdFilePathsInternalForEachDir(
         : path.dirname(resolvedHome);
 
       while (currentDir && currentDir !== path.dirname(currentDir)) {
-        if (currentDir === path.join(resolvedHome, GEMINI_CONFIG_DIR)) {
+        if (currentDir === path.join(resolvedHome, AGENT_CONFIG_DIR)) {
           break;
         }
 
-        const potentialPath = path.join(currentDir, geminiMdFilename);
+        const potentialPath = path.join(currentDir, agentMdFilename);
         try {
           await fs.access(potentialPath, fsSync.constants.R_OK);
           if (potentialPath !== globalMemoryPath) {
@@ -231,7 +231,7 @@ async function getGeminiMdFilePathsInternalForEachDir(
       };
 
       const downwardPaths = await bfsFileSearch(resolvedCwd, {
-        fileName: geminiMdFilename,
+        fileName: agentMdFilename,
         maxDirs,
         debug: debugMode,
         fileService,
@@ -253,26 +253,26 @@ async function getGeminiMdFilePathsInternalForEachDir(
 
   if (debugMode)
     logger.debug(
-      `Final ordered ${getAllGeminiMdFilenames()} paths to read: ${JSON.stringify(
+      `Final ordered ${getAllAgentMdFilenames()} paths to read: ${JSON.stringify(
         finalPaths,
       )}`,
     );
   return finalPaths;
 }
 
-async function readGeminiMdFiles(
+async function readAgentMdFiles(
   filePaths: string[],
   debugMode: boolean,
   importFormat: 'flat' | 'tree' = 'tree',
-): Promise<GeminiFileContent[]> {
+): Promise<AgentFileContent[]> {
   // Process files in parallel with concurrency limit to prevent EMFILE errors
   const CONCURRENT_LIMIT = 20; // Higher limit for file reads as they're typically faster
-  const results: GeminiFileContent[] = [];
+  const results: AgentFileContent[] = [];
 
   for (let i = 0; i < filePaths.length; i += CONCURRENT_LIMIT) {
     const batch = filePaths.slice(i, i + CONCURRENT_LIMIT);
     const batchPromises = batch.map(
-      async (filePath): Promise<GeminiFileContent> => {
+      async (filePath): Promise<AgentFileContent> => {
         try {
           const content = await fs.readFile(filePath, 'utf-8');
 
@@ -298,7 +298,7 @@ async function readGeminiMdFiles(
             const message =
               error instanceof Error ? error.message : String(error);
             logger.warn(
-              `Warning: Could not read ${getAllGeminiMdFilenames()} file at ${filePath}. Error: ${message}`,
+              `Warning: Could not read ${getAllAgentMdFilenames()} file at ${filePath}. Error: ${message}`,
             );
           }
           if (debugMode) logger.debug(`Failed to read: ${filePath}`);
@@ -326,7 +326,7 @@ async function readGeminiMdFiles(
 }
 
 function concatenateInstructions(
-  instructionContents: GeminiFileContent[],
+  instructionContents: AgentFileContent[],
   // CWD is needed to resolve relative paths for display markers
   currentWorkingDirectoryForDisplay: string,
 ): string {
@@ -347,12 +347,12 @@ function concatenateInstructions(
 }
 
 /**
- * Loads hierarchical QWEN.md files and concatenates their content.
+ * Loads hierarchical AGENTS.md files and concatenates their content.
  * This function is intended for use by the server.
  */
 export async function loadServerHierarchicalMemory(
   currentWorkingDirectory: string,
-  includeDirectoriesToReadGemini: readonly string[],
+  includeDirectoriesToReadAgent: readonly string[],
   debugMode: boolean,
   fileService: FileDiscoveryService,
   extensionContextFilePaths: string[] = [],
@@ -368,9 +368,9 @@ export async function loadServerHierarchicalMemory(
   // For the server, homedir() refers to the server process's home.
   // This is consistent with how MemoryTool already finds the global path.
   const userHomePath = homedir();
-  const filePaths = await getGeminiMdFilePathsInternal(
+  const filePaths = await getAgentMdFilePathsInternal(
     currentWorkingDirectory,
-    includeDirectoriesToReadGemini,
+    includeDirectoriesToReadAgent,
     userHomePath,
     debugMode,
     fileService,
@@ -379,10 +379,10 @@ export async function loadServerHierarchicalMemory(
     maxDirs,
   );
   if (filePaths.length === 0) {
-    if (debugMode) logger.debug('No QWEN.md files found in hierarchy.');
+    if (debugMode) logger.debug('No AGENTS.md files found in hierarchy.');
     return { memoryContent: '', fileCount: 0 };
   }
-  const contentsWithPaths = await readGeminiMdFiles(
+  const contentsWithPaths = await readAgentMdFiles(
     filePaths,
     debugMode,
     importFormat,

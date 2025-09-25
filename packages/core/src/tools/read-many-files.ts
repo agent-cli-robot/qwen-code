@@ -67,11 +67,11 @@ export interface ReadManyFilesParams {
   useDefaultExcludes?: boolean;
 
   /**
-   * Whether to respect .gitignore and .qwenignore patterns (optional, defaults to true)
+   * Whether to respect .gitignore and .agentignore patterns (optional, defaults to true)
    */
   file_filtering_options?: {
     respect_git_ignore?: boolean;
-    respect_gemini_ignore?: boolean;
+    respect_agent_ignore?: boolean;
   };
 }
 
@@ -128,17 +128,17 @@ ${this.config.getTargetDir()}
     // Determine the final list of exclusion patterns exactly as in execute method
     const paramExcludes = this.params.exclude || [];
     const paramUseDefaultExcludes = this.params.useDefaultExcludes !== false;
-    const geminiIgnorePatterns = this.config
+    const agentIgnorePatterns = this.config
       .getFileService()
-      .getGeminiIgnorePatterns();
+      .getAgentIgnorePatterns();
     const finalExclusionPatternsForDescription: string[] =
       paramUseDefaultExcludes
         ? [
             ...getDefaultExcludes(this.config),
             ...paramExcludes,
-            ...geminiIgnorePatterns,
+            ...agentIgnorePatterns,
           ]
-        : [...paramExcludes, ...geminiIgnorePatterns];
+        : [...paramExcludes, ...agentIgnorePatterns];
 
     let excludeDesc = `Excluding: ${
       finalExclusionPatternsForDescription.length > 0
@@ -151,13 +151,13 @@ ${finalExclusionPatternsForDescription
         : 'none specified'
     }`;
 
-    // Add a note if .qwenignore patterns contributed to the final list of exclusions
-    if (geminiIgnorePatterns.length > 0) {
-      const geminiPatternsInEffect = geminiIgnorePatterns.filter((p) =>
+    // Add a note if .agentignore patterns contributed to the final list of exclusions
+    if (agentIgnorePatterns.length > 0) {
+      const agentPatternsInEffect = agentIgnorePatterns.filter((p) =>
         finalExclusionPatternsForDescription.includes(p),
       ).length;
-      if (geminiPatternsInEffect > 0) {
-        excludeDesc += ` (includes ${geminiPatternsInEffect} from .qwenignore)`;
+      if (agentPatternsInEffect > 0) {
+        excludeDesc += ` (includes ${agentPatternsInEffect} from .agentignore)`;
       }
     }
 
@@ -182,9 +182,9 @@ ${finalExclusionPatternsForDescription
       respectGitIgnore:
         this.params.file_filtering_options?.respect_git_ignore ??
         defaultFileIgnores.respectGitIgnore, // Use the property from the returned object
-      respectGeminiIgnore:
-        this.params.file_filtering_options?.respect_gemini_ignore ??
-        defaultFileIgnores.respectGeminiIgnore, // Use the property from the returned object
+      respectAgentIgnore:
+        this.params.file_filtering_options?.respect_agent_ignore ??
+        defaultFileIgnores.respectAgentIgnore, // Use the property from the returned object
     };
     // Get centralized file discovery service
     const fileDiscovery = this.config.getFileService();
@@ -237,14 +237,14 @@ ${finalExclusionPatternsForDescription
               entries.map((p) => path.relative(this.config.getTargetDir(), p)),
               {
                 respectGitIgnore: true,
-                respectGeminiIgnore: false,
+                respectAgentIgnore: false,
               },
             )
             .map((p) => path.resolve(this.config.getTargetDir(), p))
         : entries;
 
       // Apply gemini ignore filtering if enabled
-      const finalFilteredEntries = fileFilteringOptions.respectGeminiIgnore
+      const finalFilteredEntries = fileFilteringOptions.respectAgentIgnore
         ? fileDiscovery
             .filterFiles(
               gitFilteredEntries.map((p) =>
@@ -252,14 +252,14 @@ ${finalExclusionPatternsForDescription
               ),
               {
                 respectGitIgnore: false,
-                respectGeminiIgnore: true,
+                respectAgentIgnore: true,
               },
             )
             .map((p) => path.resolve(this.config.getTargetDir(), p))
         : gitFilteredEntries;
 
       let gitIgnoredCount = 0;
-      let geminiIgnoredCount = 0;
+      let agentIgnoredCount = 0;
 
       for (const absoluteFilePath of entries) {
         // Security check: ensure the glob library didn't return something outside the workspace.
@@ -284,12 +284,12 @@ ${finalExclusionPatternsForDescription
           continue;
         }
 
-        // Check if this file was filtered out by gemini ignore
+        // Check if this file was filtered out by agent ignore
         if (
-          fileFilteringOptions.respectGeminiIgnore &&
+          fileFilteringOptions.respectAgentIgnore &&
           !finalFilteredEntries.includes(absoluteFilePath)
         ) {
-          geminiIgnoredCount++;
+          agentIgnoredCount++;
           continue;
         }
 
@@ -305,9 +305,9 @@ ${finalExclusionPatternsForDescription
       }
 
       // Add info about gemini-ignored files if any were filtered
-      if (geminiIgnoredCount > 0) {
+      if (agentIgnoredCount > 0) {
         skippedFiles.push({
-          path: `${geminiIgnoredCount} file(s)`,
+          path: `${agentIgnoredCount} file(s)`,
           reason: 'gemini ignored',
         });
       }
@@ -577,7 +577,7 @@ export class ReadManyFilesTool extends BaseDeclarativeTool<
         },
         file_filtering_options: {
           description:
-            'Whether to respect ignore patterns from .gitignore or .qwenignore',
+            'Whether to respect ignore patterns from .gitignore or .agentignore',
           type: 'object',
           properties: {
             respect_git_ignore: {
@@ -585,9 +585,9 @@ export class ReadManyFilesTool extends BaseDeclarativeTool<
                 'Optional: Whether to respect .gitignore patterns when listing files. Only available in git repositories. Defaults to true.',
               type: 'boolean',
             },
-            respect_gemini_ignore: {
+            respect_agent_ignore: {
               description:
-                'Optional: Whether to respect .qwenignore patterns when listing files. Defaults to true.',
+                'Optional: Whether to respect .agentignore patterns when listing files. Defaults to true.',
               type: 'boolean',
             },
           },

@@ -29,7 +29,7 @@ vi.mock('@agent-cli/agent-cli-core', () => ({
     getWorkspaceSettingsPath: () => '/tmp/agent/workspace-settings.json',
     getProjectTempDir: () => '/test/home/.agent/tmp/mocked_hash',
   })),
-  GEMINI_CONFIG_DIR: '.agent',
+  AGENT_CONFIG_DIR: '.agent',
   getErrorMessage: (e: unknown) => (e instanceof Error ? e.message : String(e)),
 }));
 vi.mock('@modelcontextprotocol/sdk/client/index.js');

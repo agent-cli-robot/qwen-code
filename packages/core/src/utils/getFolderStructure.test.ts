@@ -282,7 +282,7 @@ ${testRootDir}${path.sep}
       const structure = await getFolderStructure(testRootDir, {
         fileService,
         fileFilteringOptions: {
-          respectGeminiIgnore: false,
+          respectAgentIgnore: false,
           respectGitIgnore: false,
         },
       });
@@ -292,17 +292,17 @@ ${testRootDir}${path.sep}
     });
   });
 
-  describe('with geminiignore', () => {
-    it('should ignore geminiignore files by default', async () => {
+  describe('with agentignore', () => {
+    it('should ignore agentignore files by default', async () => {
       await fsPromises.writeFile(
-        nodePath.join(testRootDir, '.qwenignore'),
-        'ignored.txt\nnode_modules/\n.gemini/\n!/.gemini/config.yaml',
+        nodePath.join(testRootDir, '.agentignore'),
+        'ignored.txt\nnode_modules/\n.agent/\n!/.agent/config.yaml',
       );
       await createTestFile('file1.txt');
       await createTestFile('node_modules', 'some-package', 'index.js');
       await createTestFile('ignored.txt');
-      await createTestFile('.gemini', 'config.yaml');
-      await createTestFile('.gemini', 'logs.json');
+      await createTestFile('.agent', 'config.yaml');
+      await createTestFile('.agent', 'logs.json');
 
       const fileService = new FileDiscoveryService(testRootDir);
       const structure = await getFolderStructure(testRootDir, {
@@ -313,22 +313,22 @@ ${testRootDir}${path.sep}
       expect(structure).not.toContain('logs.json');
     });
 
-    it('should not ignore files if respectGeminiIgnore is false', async () => {
+    it('should not ignore files if respectAgentIgnore is false', async () => {
       await fsPromises.writeFile(
-        nodePath.join(testRootDir, '.qwenignore'),
-        'ignored.txt\nnode_modules/\n.gemini/\n!/.gemini/config.yaml',
+        nodePath.join(testRootDir, '.agentignore'),
+        'ignored.txt\nnode_modules/\n.agent/\n!/.agent/config.yaml',
       );
       await createTestFile('file1.txt');
       await createTestFile('node_modules', 'some-package', 'index.js');
       await createTestFile('ignored.txt');
-      await createTestFile('.gemini', 'config.yaml');
-      await createTestFile('.gemini', 'logs.json');
+      await createTestFile('.agent', 'config.yaml');
+      await createTestFile('.agent', 'logs.json');
 
       const fileService = new FileDiscoveryService(testRootDir);
       const structure = await getFolderStructure(testRootDir, {
         fileService,
         fileFilteringOptions: {
-          respectGeminiIgnore: false,
+          respectAgentIgnore: false,
           respectGitIgnore: true, // Explicitly disable gemini ignore only
         },
       });

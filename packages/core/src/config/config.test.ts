@@ -9,7 +9,7 @@ import type { Mock } from 'vitest';
 import type { ConfigParameters, SandboxConfig } from './config.js';
 import { Config, ApprovalMode } from './config.js';
 import * as path from 'node:path';
-import { setGeminiMdFilename as mockSetGeminiMdFilename } from '../tools/memoryTool.js';
+import { setAgentMdFilename as mockSetAgentMdFilename } from '../tools/memoryTool.js';
 import {
   DEFAULT_TELEMETRY_TARGET,
   DEFAULT_OTLP_ENDPOINT,
@@ -76,10 +76,10 @@ vi.mock('../tools/web-fetch');
 vi.mock('../tools/read-many-files');
 vi.mock('../tools/memoryTool', () => ({
   MemoryTool: vi.fn(),
-  setGeminiMdFilename: vi.fn(),
-  getCurrentGeminiMdFilename: vi.fn(() => 'AGENTS.md'), // Mock the original filename
+  setAgentMdFilename: vi.fn(),
+  getCurrentAgentMdFilename: vi.fn(() => 'AGENTS.md'), // Mock the new function name
   DEFAULT_CONTEXT_FILENAME: 'AGENTS.md',
-  GEMINI_CONFIG_DIR: '.gemini',
+  AGENT_CONFIG_DIR: '.agent',
 }));
 
 vi.mock('../core/contentGenerator.js', async (importOriginal) => {
@@ -409,19 +409,19 @@ describe('Server Config (config.ts)', () => {
     expect(config.getUserMemory()).toBe('');
   });
 
-  it('Config constructor should call setGeminiMdFilename with contextFileName if provided', () => {
+  it('Config constructor should call setAgentMdFilename with contextFileName if provided', () => {
     const contextFileName = 'CUSTOM_AGENTS.md';
     const paramsWithContextFile: ConfigParameters = {
       ...baseParams,
       contextFileName,
     };
     new Config(paramsWithContextFile);
-    expect(mockSetGeminiMdFilename).toHaveBeenCalledWith(contextFileName);
+    expect(mockSetAgentMdFilename).toHaveBeenCalledWith(contextFileName);
   });
 
-  it('Config constructor should not call setGeminiMdFilename if contextFileName is not provided', () => {
+  it('Config constructor should not call setAgentMdFilename if contextFileName is not provided', () => {
     new Config(baseParams); // baseParams does not have contextFileName
-    expect(mockSetGeminiMdFilename).not.toHaveBeenCalled();
+    expect(mockSetAgentMdFilename).not.toHaveBeenCalled();
   });
 
   it('should set default file filtering settings when not provided', () => {
