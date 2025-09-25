@@ -10,7 +10,7 @@ import {
   setupUnhandledRejectionHandler,
   validateDnsResolutionOrder,
   startInteractiveUI,
-} from './gemini.js';
+} from './agent.js';
 import type { SettingsFile } from './config/settings.js';
 import { LoadedSettings, loadSettings } from './config/settings.js';
 import { appEvents, AppEvent } from './utils/events.js';
@@ -74,7 +74,7 @@ vi.mock('./utils/sandbox.js', () => ({
   start_sandbox: vi.fn(() => Promise.resolve()), // Mock as an async function that resolves
 }));
 
-describe('gemini.tsx main function', () => {
+describe('agent.tsx main function', () => {
   let loadSettingsMock: ReturnType<typeof vi.mocked<typeof loadSettings>>;
   let originalEnvGeminiSandbox: string | undefined;
   let originalEnvSandbox: string | undefined;
