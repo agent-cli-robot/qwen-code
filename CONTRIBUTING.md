@@ -4,24 +4,28 @@ We would love to accept your patches and contributions to this project.
 
 ## Before you begin
 
-### Sign our Contributor License Agreement
+### Our Contributor License Agreement
 
-Contributions to this project must be accompanied by a
-[Contributor License Agreement](https://cla.developers.google.com/about) (CLA).
-You (or your employer) retain the copyright to your contribution; this simply
-gives us permission to use and redistribute your contributions as part of the
-project.
+A Contributor License Agreement (CLA) is a legal document that gives us permission to use and distribute your contribution to our open source projects. When you sign a CLA:
+- You give us legal permission to use and distribute your contribution
+- You retain ownership of your contribution
+- You do not give up your rights to use your contribution elsewhere
 
-If you or your current employer have already signed the Google CLA (even if it
-was for a different project), you probably don't need to do it again.
+#### Why Contributors Need to Sign a CLA
+We verify that each contribution is covered by a CLA before accepting it. Submissions without a CLA on file will not be accepted. It provides legal protection for both the project maintainers and the contributor.
 
-Visit <https://cla.developers.google.com/> to see your current agreements or to
-sign a new one.
+#### Types of CLAs
+We offer two templates depending on copyright ownership:
+1. **Corporate CLA** - For contributions made on behalf of an entity or organization
+2. **Individual CLA** - For contributions made in personal capacity
 
-### Review our Community Guidelines
+#### Rights Granted
+- Legal permission for us to use and distribute contributions
+- Does not transfer ownership of the contribution
+- Does not restrict the contributor's rights to use their contribution elsewhere
 
-This project follows [Google's Open Source Community
-Guidelines](https://opensource.google/conduct/).
+#### How the CLA Process Works
+All contributors must agree to the CLA before their contributions can be accepted. The CLA will be administered through our GitHub integration, and you will be prompted to sign the agreement when you submit your first pull request to our project.
 
 ## Contribution Process
 
