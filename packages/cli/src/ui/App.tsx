@@ -61,6 +61,7 @@ import {
 import {
   getOpenAIAvailableModelFromEnv,
   getFilteredQwenModels,
+  getFilteredGeminiModels,
   type AvailableModel,
 } from './models/availableModels.js';
 import { processVisionSwitchOutcome } from './hooks/useVisionAutoSwitch.js';
@@ -692,6 +693,11 @@ const App = ({ config, settings, startupWarnings = [], version }: AppProps) => {
         const openAIModel = getOpenAIAvailableModelFromEnv();
         return openAIModel ? [openAIModel] : [];
       }
+      case AuthType.USE_GEMINI:
+      case AuthType.LOGIN_WITH_GOOGLE:
+      case AuthType.CLOUD_SHELL:
+      case AuthType.USE_VERTEX_AI:
+        return getFilteredGeminiModels(visionModelPreviewEnabled);
       default:
         return [];
     }

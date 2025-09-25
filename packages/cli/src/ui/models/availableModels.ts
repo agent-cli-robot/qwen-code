@@ -31,6 +31,34 @@ export function getFilteredQwenModels(
 }
 
 /**
+ * Get available Gemini models filtered by vision model preview setting
+ */
+export function getFilteredGeminiModels(
+  visionModelPreviewEnabled: boolean,
+): AvailableModel[] {
+  const availableModels: AvailableModel[] = [
+    { id: 'gemini-2.5-pro', label: 'gemini-2.5-pro' },
+    { id: 'gemini-2.5-flash', label: 'gemini-2.5-flash' },
+    { id: 'gemini-2.5-flash-lite', label: 'gemini-2.5-flash-lite' },
+    // Add vision model if preview is enabled
+    ...(visionModelPreviewEnabled
+      ? [
+          {
+            id: 'gemini-2.5-pro-vision',
+            label: 'gemini-2.5-pro-vision',
+            isVision: true,
+          },
+        ]
+      : []),
+  ];
+
+  if (visionModelPreviewEnabled) {
+    return availableModels;
+  }
+  return availableModels.filter((model) => !model.isVision);
+}
+
+/**
  * Currently we use the single model of `OPENAI_MODEL` in the env.
  * In the future, after settings.json is updated, we will allow users to configure this themselves.
  */
