@@ -7,6 +7,7 @@
 export * from './src/index.js';
 export { Storage } from './src/config/storage.js';
 export {
+  DEFAULT_QWEN_MODEL,
   DEFAULT_GEMINI_MODEL,
   DEFAULT_GEMINI_FLASH_MODEL,
   DEFAULT_GEMINI_FLASH_LITE_MODEL,

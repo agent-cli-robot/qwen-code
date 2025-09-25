@@ -7,7 +7,7 @@
 export const DEFAULT_QWEN_MODEL = 'coder-model';
 export const DEFAULT_QWEN_FLASH_MODEL = 'coder-model';
 
-export const DEFAULT_GEMINI_MODEL = 'coder-model';
+export const DEFAULT_GEMINI_MODEL = 'gemini-2.5-pro';
 export const DEFAULT_GEMINI_FLASH_MODEL = 'gemini-2.5-flash';
 export const DEFAULT_GEMINI_FLASH_LITE_MODEL = 'gemini-2.5-flash-lite';
 
