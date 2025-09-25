@@ -22,7 +22,7 @@ WORKDIR /home/node/app
 # Install dependencies and build packages
 RUN npm ci \
   && npm run build --workspaces \
-  && npm pack -w @agent-cli/agent-cli --pack-destination ./packages/cli/dist \\
+  && npm pack -w @agent-cli/agent-cli --pack-destination ./packages/cli/dist \
   && npm pack -w @agent-cli/agent-cli-core --pack-destination ./packages/core/dist
 
 # Runtime stage
@@ -70,4 +70,4 @@ RUN npm install -g /tmp/*.tgz \
   && rm -rf /tmp/*.tgz
 
 # Default entrypoint when none specified
-CMD ["qwen"]
+CMD ["agent"]
