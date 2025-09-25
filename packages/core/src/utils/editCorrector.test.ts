@@ -175,7 +175,7 @@ describe('editCorrector', () => {
         mcpServers: undefined as Record<string, any> | undefined,
         userAgent: 'test-agent',
         userMemory: '',
-        geminiMdFileCount: 0,
+        agentMdFileCount: 0,
         alwaysSkipModificationConfirmation: false,
       };
       mockConfigInstance = {
@@ -198,9 +198,9 @@ describe('editCorrector', () => {
         setUserMemory: vi.fn((mem: string) => {
           configParams.userMemory = mem;
         }),
-        getGeminiMdFileCount: vi.fn(() => configParams.geminiMdFileCount),
-        setGeminiMdFileCount: vi.fn((count: number) => {
-          configParams.geminiMdFileCount = count;
+        getAgentMdFileCount: vi.fn(() => configParams.agentMdFileCount),
+        setAgentMdFileCount: vi.fn((count: number) => {
+          configParams.agentMdFileCount = count;
         }),
         getAlwaysSkipModificationConfirmation: vi.fn(
           () => configParams.alwaysSkipModificationConfirmation,
@@ -617,7 +617,7 @@ describe('editCorrector', () => {
         mcpServers: undefined as Record<string, any> | undefined,
         userAgent: 'test-agent',
         userMemory: '',
-        geminiMdFileCount: 0,
+        agentMdFileCount: 0,
         alwaysSkipModificationConfirmation: false,
       };
       mockConfigInstance = {
@@ -640,9 +640,9 @@ describe('editCorrector', () => {
         setUserMemory: vi.fn((mem: string) => {
           configParams.userMemory = mem;
         }),
-        getGeminiMdFileCount: vi.fn(() => configParams.geminiMdFileCount),
-        setGeminiMdFileCount: vi.fn((count: number) => {
-          configParams.geminiMdFileCount = count;
+        getAgentMdFileCount: vi.fn(() => configParams.agentMdFileCount),
+        setAgentMdFileCount: vi.fn((count: number) => {
+          configParams.agentMdFileCount = count;
         }),
         getAlwaysSkipModificationConfirmation: vi.fn(
           () => configParams.alwaysSkipModificationConfirmation,

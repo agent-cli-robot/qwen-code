@@ -70,36 +70,36 @@ Do NOT use this tool:
   - If not specified, the tool will ask the user where they want to save the memory.
 `;
 
-export const GEMINI_CONFIG_DIR = '.agent';
+export const AGENT_CONFIG_DIR = '.agent';
 export const DEFAULT_CONTEXT_FILENAME = 'AGENTS.md';
 export const MEMORY_SECTION_HEADER = '## Agent Added Memories';
 
 // This variable will hold the currently configured filename for AGENTS.md context files.
-// It defaults to DEFAULT_CONTEXT_FILENAME but can be overridden by setGeminiMdFilename.
-let currentGeminiMdFilename: string | string[] = DEFAULT_CONTEXT_FILENAME;
+// It defaults to DEFAULT_CONTEXT_FILENAME but can be overridden by setAgentMdFilename.
+let currentAgentMdFilename: string | string[] = DEFAULT_CONTEXT_FILENAME;
 
-export function setGeminiMdFilename(newFilename: string | string[]): void {
+export function setAgentMdFilename(newFilename: string | string[]): void {
   if (Array.isArray(newFilename)) {
     if (newFilename.length > 0) {
-      currentGeminiMdFilename = newFilename.map((name) => name.trim());
+      currentAgentMdFilename = newFilename.map((name) => name.trim());
     }
   } else if (newFilename && newFilename.trim() !== '') {
-    currentGeminiMdFilename = newFilename.trim();
+    currentAgentMdFilename = newFilename.trim();
   }
 }
 
-export function getCurrentGeminiMdFilename(): string {
-  if (Array.isArray(currentGeminiMdFilename)) {
-    return currentGeminiMdFilename[0];
+export function getCurrentAgentMdFilename(): string {
+  if (Array.isArray(currentAgentMdFilename)) {
+    return currentAgentMdFilename[0];
   }
-  return currentGeminiMdFilename;
+  return currentAgentMdFilename;
 }
 
-export function getAllGeminiMdFilenames(): string[] {
-  if (Array.isArray(currentGeminiMdFilename)) {
-    return currentGeminiMdFilename;
+export function getAllAgentMdFilenames(): string[] {
+  if (Array.isArray(currentAgentMdFilename)) {
+    return currentAgentMdFilename;
   }
-  return [currentGeminiMdFilename];
+  return [currentAgentMdFilename];
 }
 
 interface SaveMemoryParams {
@@ -110,11 +110,11 @@ interface SaveMemoryParams {
 }
 
 function getGlobalMemoryFilePath(): string {
-  return path.join(Storage.getGlobalGeminiDir(), getCurrentGeminiMdFilename());
+  return path.join(Storage.getGlobalAgentDir(), getCurrentAgentMdFilename());
 }
 
 function getProjectMemoryFilePath(): string {
-  return path.join(process.cwd(), getCurrentGeminiMdFilename());
+  return path.join(process.cwd(), getCurrentAgentMdFilename());
 }
 
 function getMemoryFilePath(scope: 'global' | 'project' = 'global'): string {

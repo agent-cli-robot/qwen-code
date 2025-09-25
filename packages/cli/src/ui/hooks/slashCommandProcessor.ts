@@ -58,7 +58,7 @@ export const useSlashCommandProcessor = (
   openAgentsManagerDialog: () => void,
   toggleVimEnabled: () => Promise<boolean>,
   setIsProcessing: (isProcessing: boolean) => void,
-  setGeminiMdFileCount: (count: number) => void,
+  setAgentMdFileCount: (count: number) => void,
   _showQuitConfirmation: () => void,
 ) => {
   const session = useSessionStats();
@@ -200,7 +200,7 @@ export const useSlashCommandProcessor = (
         setPendingItem: setPendingCompressionItem,
         toggleCorgiMode,
         toggleVimEnabled,
-        setGeminiMdFileCount,
+        setAgentMdFileCount,
         reloadCommands,
       },
       session: {
@@ -224,7 +224,7 @@ export const useSlashCommandProcessor = (
       toggleCorgiMode,
       toggleVimEnabled,
       sessionShellAllowlist,
-      setGeminiMdFileCount,
+      setAgentMdFileCount,
       reloadCommands,
     ],
   );

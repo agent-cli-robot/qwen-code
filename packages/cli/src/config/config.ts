@@ -18,9 +18,9 @@ import {
   DEFAULT_MEMORY_FILE_FILTERING_OPTIONS,
   EditTool,
   FileDiscoveryService,
-  getCurrentGeminiMdFilename,
+  getCurrentAgentMdFilename,
   loadServerHierarchicalMemory,
-  setGeminiMdFilename as setServerGeminiMdFilename,
+  setAgentMdFilename as setServerAgentMdFilename,
   ShellTool,
   WriteFileTool,
 } from '@agent-cli/agent-cli-core';
@@ -430,10 +430,10 @@ export async function loadCliConfig(
   // directly to the Config constructor in core, and have core handle setGeminiMdFilename.
   // However, loadHierarchicalGeminiMemory is called *before* createServerConfig.
   if (settings.context?.fileName) {
-    setServerGeminiMdFilename(settings.context.fileName);
+    setServerAgentMdFilename(settings.context.fileName);
   } else {
     // Reset to default if not provided in settings.
-    setServerGeminiMdFilename(getCurrentGeminiMdFilename());
+    setServerAgentMdFilename(getCurrentAgentMdFilename());
   }
 
   const extensionContextFilePaths = activeExtensions.flatMap(
@@ -579,7 +579,7 @@ export async function loadCliConfig(
     mcpServerCommand: settings.mcp?.serverCommand,
     mcpServers,
     userMemory: memoryContent,
-    geminiMdFileCount: fileCount,
+    agentMdFileCount: fileCount,
     approvalMode,
     showMemoryUsage:
       argv.showMemoryUsage || settings.ui?.showMemoryUsage || false,
@@ -607,7 +607,7 @@ export async function loadCliConfig(
     // Git-aware file filtering settings
     fileFiltering: {
       respectGitIgnore: settings.context?.fileFiltering?.respectGitIgnore,
-      respectGeminiIgnore: settings.context?.fileFiltering?.respectGeminiIgnore,
+      respectAgentIgnore: settings.context?.fileFiltering?.respectAgentIgnore,
       enableRecursiveFileSearch:
         settings.context?.fileFiltering?.enableRecursiveFileSearch,
       disableFuzzySearch: settings.context?.fileFiltering?.disableFuzzySearch,

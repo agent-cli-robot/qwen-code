@@ -54,7 +54,7 @@ describe('LSTool', () => {
     // Mock FileService
     mockFileService = {
       shouldGitIgnoreFile: vi.fn().mockReturnValue(false),
-      shouldGeminiIgnoreFile: vi.fn().mockReturnValue(false),
+      shouldAgentIgnoreFile: vi.fn().mockReturnValue(false),
     } as unknown as FileDiscoveryService;
 
     // Mock Config
@@ -64,7 +64,7 @@ describe('LSTool', () => {
       getFileService: vi.fn().mockReturnValue(mockFileService),
       getFileFilteringOptions: vi.fn().mockReturnValue({
         respectGitIgnore: true,
-        respectGeminiIgnore: true,
+        respectAgentIgnore: true,
       }),
     } as unknown as Config;
 
@@ -264,7 +264,7 @@ describe('LSTool', () => {
         } as fs.Stats;
       });
       vi.mocked(fs.readdirSync).mockReturnValue(mockFiles as any);
-      (mockFileService.shouldGeminiIgnoreFile as any).mockImplementation(
+      (mockFileService.shouldAgentIgnoreFile as any).mockImplementation(
         (path: string) => path.includes('private.js'),
       );
 
@@ -274,7 +274,7 @@ describe('LSTool', () => {
       expect(result.llmContent).toContain('file1.js');
       expect(result.llmContent).toContain('file2.js');
       expect(result.llmContent).not.toContain('private.js');
-      expect(result.returnDisplay).toBe('Listed 2 item(s). (1 gemini-ignored)');
+      expect(result.returnDisplay).toBe('Listed 2 item(s). (1 agent-ignored)');
     });
 
     it('should handle non-directory paths', async () => {

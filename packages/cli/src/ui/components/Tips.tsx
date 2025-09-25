@@ -14,7 +14,7 @@ interface TipsProps {
 }
 
 export const Tips: React.FC<TipsProps> = ({ config }) => {
-  const geminiMdFileCount = config.getGeminiMdFileCount();
+  const agentMdFileCount = config.getAgentMdFileCount();
   return (
     <Box flexDirection="column">
       <Text color={Colors.Foreground}>Tips for getting started:</Text>
@@ -24,17 +24,17 @@ export const Tips: React.FC<TipsProps> = ({ config }) => {
       <Text color={Colors.Foreground}>
         2. Be specific for the best results.
       </Text>
-      {geminiMdFileCount === 0 && (
+      {agentMdFileCount === 0 && (
         <Text color={Colors.Foreground}>
           3. Create{' '}
           <Text bold color={Colors.AccentPurple}>
-            QWEN.md
+            AGENTS.md
           </Text>{' '}
           files to customize your interactions.
         </Text>
       )}
       <Text color={Colors.Foreground}>
-        {geminiMdFileCount === 0 ? '4.' : '3.'}{' '}
+        {agentMdFileCount === 0 ? '4.' : '3.'}{' '}
         <Text bold color={Colors.AccentPurple}>
           /help
         </Text>{' '}

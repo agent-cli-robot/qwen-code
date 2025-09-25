@@ -202,13 +202,13 @@ export async function handleAtCommand({
       respectFileIgnore.respectGitIgnore &&
       fileDiscovery.shouldIgnoreFile(pathName, {
         respectGitIgnore: true,
-        respectGeminiIgnore: false,
+        respectAgentIgnore: false,
       });
     const geminiIgnored =
-      respectFileIgnore.respectGeminiIgnore &&
+      respectFileIgnore.respectAgentIgnore &&
       fileDiscovery.shouldIgnoreFile(pathName, {
         respectGitIgnore: false,
-        respectGeminiIgnore: true,
+        respectAgentIgnore: true,
       });
 
     if (gitIgnored || geminiIgnored) {
@@ -399,7 +399,7 @@ export async function handleAtCommand({
     paths: pathSpecsToRead,
     file_filtering_options: {
       respect_git_ignore: respectFileIgnore.respectGitIgnore,
-      respect_gemini_ignore: respectFileIgnore.respectGeminiIgnore,
+      respect_agent_ignore: respectFileIgnore.respectAgentIgnore,
     },
     // Use configuration setting
   };

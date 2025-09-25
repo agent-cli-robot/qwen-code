@@ -81,7 +81,7 @@ describe('loadIgnoreRules', () => {
     const ignore = loadIgnoreRules({
       projectRoot: tmpDir,
       useGitignore: true,
-      useGeminiignore: false,
+      useAgentignore: false,
       ignoreDirs: [],
     });
     const fileFilter = ignore.getFileFilter();
@@ -89,14 +89,14 @@ describe('loadIgnoreRules', () => {
     expect(fileFilter('test.txt')).toBe(false);
   });
 
-  it('should load rules from .qwenignore', async () => {
+  it('should load rules from .agentignore', async () => {
     tmpDir = await createTmpDir({
-      '.qwenignore': '*.log',
+      '.agentignore': '*.log',
     });
     const ignore = loadIgnoreRules({
       projectRoot: tmpDir,
       useGitignore: false,
-      useGeminiignore: true,
+      useAgentignore: true,
       ignoreDirs: [],
     });
     const fileFilter = ignore.getFileFilter();
@@ -104,15 +104,15 @@ describe('loadIgnoreRules', () => {
     expect(fileFilter('test.txt')).toBe(false);
   });
 
-  it('should combine rules from .gitignore and .qwenignore', async () => {
+  it('should combine rules from .gitignore and .agentignore', async () => {
     tmpDir = await createTmpDir({
       '.gitignore': '*.log',
-      '.qwenignore': '*.txt',
+      '.agentignore': '*.txt',
     });
     const ignore = loadIgnoreRules({
       projectRoot: tmpDir,
       useGitignore: true,
-      useGeminiignore: true,
+      useAgentignore: true,
       ignoreDirs: [],
     });
     const fileFilter = ignore.getFileFilter();
@@ -126,7 +126,7 @@ describe('loadIgnoreRules', () => {
     const ignore = loadIgnoreRules({
       projectRoot: tmpDir,
       useGitignore: false,
-      useGeminiignore: false,
+      useAgentignore: false,
       ignoreDirs: ['logs/'],
     });
     const dirFilter = ignore.getDirectoryFilter();
@@ -139,7 +139,7 @@ describe('loadIgnoreRules', () => {
     const ignore = loadIgnoreRules({
       projectRoot: tmpDir,
       useGitignore: true,
-      useGeminiignore: true,
+      useAgentignore: true,
       ignoreDirs: [],
     });
     const fileFilter = ignore.getFileFilter();
@@ -151,7 +151,7 @@ describe('loadIgnoreRules', () => {
     const ignore = loadIgnoreRules({
       projectRoot: tmpDir,
       useGitignore: false,
-      useGeminiignore: false,
+      useAgentignore: false,
       ignoreDirs: [],
     });
     const dirFilter = ignore.getDirectoryFilter();

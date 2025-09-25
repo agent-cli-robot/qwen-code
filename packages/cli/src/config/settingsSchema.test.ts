@@ -101,7 +101,7 @@ describe('SettingsSchema', () => {
       ).toBeDefined();
       expect(
         SETTINGS_SCHEMA.context.properties.fileFiltering.properties
-          ?.respectGeminiIgnore,
+          ?.respectAgentIgnore,
       ).toBeDefined();
       expect(
         SETTINGS_SCHEMA.context.properties.fileFiltering.properties
